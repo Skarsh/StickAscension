@@ -1,0 +1,41 @@
+[gd_resource type="Theme" load_steps=10 format=3 uid="uid://bxe8wyv5hmnn6"]
+
+[ext_resource type="FontFile" uid="uid://ddixgh1gdbed" path="res://fonts/RPGMarshIsland.ttf" id="1_2d34s"]
+[ext_resource type="Texture2D" uid="uid://ckr7tq23s5t32" path="res://ui/PanelTest.png" id="1_gcmde"]
+[ext_resource type="Texture2D" uid="uid://ko4ighcht2tp" path="res://ui/EnemyCardEmpty1.png" id="3_i0mh2"]
+[ext_resource type="Texture2D" uid="uid://d1u4bv06f4mxt" path="res://sprites/EnemyCardSlime.png" id="3_nwa5r"]
+[ext_resource type="Texture2D" uid="uid://b75vuww6tsqo2" path="res://sprites/PlayerCardStick2.png" id="4_j0oss"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v2qrn"]
+texture = ExtResource("1_gcmde")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d5wx6"]
+texture = ExtResource("3_nwa5r")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x0ry6"]
+texture = ExtResource("3_i0mh2")
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1wluk"]
+texture = ExtResource("4_j0oss")
+
+[resource]
+BigPanelContainer/base_type = &"PanelContainer"
+BigPanelContainer/styles/panel = SubResource("StyleBoxTexture_v2qrn")
+Button/font_sizes/font_size = 32
+Button/fonts/font = ExtResource("1_2d34s")
+EnemyPanelContainer/base_type = &"PanelContainer"
+EnemyPanelContainer/styles/panel = SubResource("StyleBoxTexture_d5wx6")
+HeaderLarge/font_sizes/font_size = 64
+Label/font_sizes/font_size = 32
+Label/fonts/font = ExtResource("1_2d34s")
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_x0ry6")
+PlayerPanelContainer/base_type = &"PanelContainer"
+PlayerPanelContainer/styles/panel = SubResource("StyleBoxTexture_1wluk")
