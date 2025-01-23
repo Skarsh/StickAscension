@@ -6,10 +6,14 @@ class_name Player
 
 var stats: Stats
 
-func damage(amount: int) -> void:
+func take_damage(amount: int) -> void:
 	stats.health -= amount
 	health_bar.value = stats.health
 	print(health_bar.value)
+
+func attack(enemy_stats: Stats) -> int:
+	var value = 14 - enemy_stats.def
+	return value
 
 func _ready() -> void:
 	stats = Stats.new()

@@ -45,8 +45,8 @@ func _process(delta: float) -> void:
 	#    shake_duration = 0
 	
 	if Input.is_action_just_pressed("ui_select"):
-		player.damage(1)
-		enemy.damage(1)
+		player.take_damage(enemy.attack(player.stats))
+		enemy.take_damage(player.attack(enemy.stats))
 		
 
 func _on_ok_button_pressed() -> void:
