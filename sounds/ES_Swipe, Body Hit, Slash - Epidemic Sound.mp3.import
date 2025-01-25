@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c2e5ki58w41o8"
+path="res://.godot/imported/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3-7d6cc17fe39490052df432147dfc4b37.mp3str"
+
+[deps]
+
+source_file="res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3-7d6cc17fe39490052df432147dfc4b37.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

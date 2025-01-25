@@ -3,8 +3,10 @@ extends Node2D
 @onready var camera: Camera2D = $Camera2D
 @onready var mission_text: MissionText = $CanvasLayer/MissionTextPanelContainer
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var sound_player: AudioStreamPlayer = $SoundPlayer
 
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
+var stick_attack_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
 
 var player_scene = preload("res://scenes/player.tscn")
 var enemy_scene = preload("res://scenes/enemy.tscn")
@@ -13,6 +15,8 @@ var player_instance
 var enemy_instance
 
 var game_active = false
+
+var player_turn = true
 
 func _ready() -> void:
 
@@ -29,12 +33,15 @@ func _ready() -> void:
 	enemy_instance.hide()
 
 func _process(delta: float) -> void:	
-	if Input.is_action_just_pressed("ui_accept") and game_active:
-		player_instance.take_damage(enemy_instance.attack(player_instance.stats))
+	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn:
+		sound_player.stream = stick_attack_sound
+		sound_player.play()
 		enemy_instance.take_damage(player_instance.attack(enemy_instance.stats))
-	pass
+		player_turn = false
+	elif Input.is_action_just_pressed("ui_accept") and game_active and not player_turn:
+		player_turn = true
+		player_instance.take_damage(enemy_instance.attack(player_instance.stats))
 		
-
 func _on_ok_button_pressed() -> void:
 	mission_text.hide()
 	mission_text.stop_typing_effect()

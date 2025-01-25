@@ -198,4 +198,6 @@ stream = ExtResource("6_ufe5y")
 volume_db = -11.417
 autoplay = true
 
+[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]

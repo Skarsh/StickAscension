@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c4sa4ieexanxb"
+path="res://.godot/imported/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3-7bb16761c47863371b56a1c9a0b1e3c7.mp3str"
+
+[deps]
+
+source_file="res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3"
+dest_files=["res://.godot/imported/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3-7bb16761c47863371b56a1c9a0b1e3c7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
