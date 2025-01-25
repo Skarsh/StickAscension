@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 
 class_name Player
 
@@ -9,7 +9,6 @@ var stats: Stats
 func take_damage(amount: int) -> void:
 	stats.health -= amount
 	health_bar.value = stats.health
-	print(health_bar.value)
 
 func attack(enemy_stats: Stats) -> int:
 	var value = 14 - enemy_stats.def
@@ -19,8 +18,6 @@ func _ready() -> void:
 	stats = Stats.new()
 	health_bar.value = stats.health
 
-class Stats: 
-	var health: int = 100
-	var atk: int = 10
-	var def: int = 3
-	var ap: int = 10
+func _process(delta: float) -> void:
+	#position = Vector2(100, 100) * cos(Time.get_unix_time_from_system()) + Vector2(100, 100) * sin(Time.get_unix_time_from_system())
+	pass

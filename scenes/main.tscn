@@ -1,12 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cwfoiqu4ta7o2"]
+[gd_scene load_steps=8 format=3 uid="uid://cwfoiqu4ta7o2"]
 
 [ext_resource type="Texture2D" uid="uid://c6f2hkh2bgigk" path="res://images/Background.png" id="1_q6nfu"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_w7hsy"]
-[ext_resource type="Texture2D" uid="uid://ngm86t5kikq3" path="res://sprites/Revolver2.png" id="2_7cqxj"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="2_7d7ee"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="6_16rhv"]
 [ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="6_ufe5y"]
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="7_dp07x"]
 [ext_resource type="Script" path="res://scripts/mission_text.gd" id="8_eknqy"]
 [ext_resource type="AudioStream" uid="uid://ckavuu7ijlm48" path="res://sounds/ES_Handwriting, Pen On Paper, Writing 02 - Epidemic Sound.mp3" id="9_kxj33"]
 
@@ -25,12 +22,10 @@ metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Enemy" type="Node2D" parent="CanvasLayer" node_paths=PackedStringArray("health_bar")]
+[node name="Enemy_OLD" type="Node2D" parent="CanvasLayer"]
 visible = false
-script = ExtResource("7_dp07x")
-health_bar = NodePath("EnemyPanelContainer/VBoxContainer/HealthBar")
 
-[node name="EnemyPanelContainer" type="PanelContainer" parent="CanvasLayer/Enemy"]
+[node name="EnemyPanelContainer" type="PanelContainer" parent="CanvasLayer/Enemy_OLD"]
 offset_left = 1348.21
 offset_top = 150.0
 offset_right = 1876.21
@@ -38,10 +33,10 @@ offset_bottom = 810.0
 theme = ExtResource("2_7d7ee")
 theme_type_variation = &"EnemyPanelContainer"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Enemy/EnemyPanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer"]
 layout_mode = 2
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer"]
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
@@ -49,42 +44,40 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3vtx0")
 value = 1.0
 show_percentage = false
 
-[node name="Control" type="Control" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 75
 theme_override_constants/margin_top = 110
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="HP" type="Label" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="HP" type="Label" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "HP: 10   "
 
-[node name="ATK" type="Label" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="ATK" type="Label" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "ATK: 10"
 
-[node name="DEF" type="Label" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="DEF" type="Label" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "DEF: 3"
 
-[node name="AP" type="Label" parent="CanvasLayer/Enemy/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="AP" type="Label" parent="CanvasLayer/Enemy_OLD/EnemyPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "AP:   10"
 
-[node name="Player" type="Node2D" parent="CanvasLayer" node_paths=PackedStringArray("health_bar")]
+[node name="Player_OLD" type="Node2D" parent="CanvasLayer"]
 visible = false
-script = ExtResource("6_16rhv")
-health_bar = NodePath("PlayerPanelContainer/VBoxContainer/HealthBar")
 
-[node name="PlayerPanelContainer" type="PanelContainer" parent="CanvasLayer/Player"]
+[node name="PlayerPanelContainer" type="PanelContainer" parent="CanvasLayer/Player_OLD"]
 offset_left = 65.0
 offset_top = 150.0
 offset_right = 593.0
@@ -92,10 +85,10 @@ offset_bottom = 810.0
 theme = ExtResource("2_7d7ee")
 theme_type_variation = &"PlayerPanelContainer"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Player/PlayerPanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Player_OLD/PlayerPanelContainer"]
 layout_mode = 2
 
-[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer"]
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
@@ -103,89 +96,35 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3vtx0")
 value = 1.0
 show_percentage = false
 
-[node name="Control" type="Control" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 75
 theme_override_constants/margin_top = 110
 
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="HP" type="Label" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="HP" type="Label" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "HP: 10   "
 
-[node name="ATK" type="Label" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="ATK" type="Label" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "ATK: 10"
 
-[node name="DEF" type="Label" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="DEF" type="Label" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "DEF: 3"
 
-[node name="AP" type="Label" parent="CanvasLayer/Player/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
+[node name="AP" type="Label" parent="CanvasLayer/Player_OLD/PlayerPanelContainer/VBoxContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 text = "AP:   10"
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-visible = false
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -137.0
-offset_top = -1.0
-offset_bottom = 139.0
-grow_horizontal = 0
-theme = ExtResource("2_7d7ee")
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 0
-
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/PanelContainer/MarginContainer"]
-layout_mode = 2
-columns = 2
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-texture = ExtResource("2_7cqxj")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "100"
-
-[node name="TextureRect2" type="TextureRect" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-texture = ExtResource("2_7cqxj")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Label2" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "100
-"
-
-[node name="TextureRect3" type="TextureRect" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-texture = ExtResource("2_7cqxj")
-expand_mode = 2
-stretch_mode = 5
-
-[node name="Label3" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "100
-"
 
 [node name="MissionTextPanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 8
@@ -253,7 +192,6 @@ size_flags_horizontal = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/MissionTextPanelContainer"]
 stream = ExtResource("9_kxj33")
-autoplay = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")

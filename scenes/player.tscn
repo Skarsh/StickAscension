@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://ccstjowtyxv8t"]
+
+[ext_resource type="Texture2D" uid="uid://b75vuww6tsqo2" path="res://sprites/PlayerCardStick2.png" id="1_dp0s6"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_j77lh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xskod"]
+size = Vector2(124, 160)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_331le"]
+bg_color = Color(0.26, 0.0546, 0.0546, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5wf1"]
+bg_color = Color(0.6, 0.066, 0.066, 1)
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_bar")]
+script = ExtResource("1_j77lh")
+health_bar = NodePath("HealthBar")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, -4)
+shape = SubResource("RectangleShape2D_xskod")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_dp0s6")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -62.0
+offset_top = -101.0
+offset_right = 64.0
+offset_bottom = -89.0
+theme_override_styles/background = SubResource("StyleBoxFlat_331le")
+theme_override_styles/fill = SubResource("StyleBoxFlat_t5wf1")
+show_percentage = false
