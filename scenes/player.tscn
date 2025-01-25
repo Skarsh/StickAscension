@@ -31,3 +31,43 @@ offset_bottom = -89.0
 theme_override_styles/background = SubResource("StyleBoxFlat_331le")
 theme_override_styles/fill = SubResource("StyleBoxFlat_t5wf1")
 show_percentage = false
+
+[node name="HP" type="Label" parent="."]
+offset_left = -47.545
+offset_top = 25.0
+offset_right = 1.455
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.67, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "HP:   10"
+
+[node name="DEF" type="Label" parent="."]
+offset_left = -47.545
+offset_top = 40.505
+offset_right = 1.455
+offset_bottom = 63.505
+theme_override_colors/font_color = Color(0.0845, 0.357825, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "DEF: 10"
+
+[node name="AP" type="Label" parent="."]
+offset_left = 6.43
+offset_top = 40.505
+offset_right = 55.43
+offset_bottom = 63.505
+theme_override_colors/font_color = Color(0.302305, 0.614729, 0.137852, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "AP:    10"
+
+[node name="ATK" type="Label" parent="."]
+offset_left = 6.595
+offset_top = 25.0
+offset_right = 63.595
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.780507, 0.608683, 0.32054, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "ATK: 10"
