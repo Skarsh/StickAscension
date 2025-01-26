@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dun1bphk07ljs"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_6d8df"]
-[ext_resource type="Texture2D" uid="uid://d2fe6lcaltfem" path="res://sprites/Slime_version_2_Merged.png" id="1_vx148"]
+[ext_resource type="Texture2D" uid="uid://druubvx4s1fk" path="res://sprites/Slime_version_2_2_merged_10xScaled.png" id="2_4sk0d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bd0l7"]
 size = Vector2(124, 160)
@@ -22,7 +22,7 @@ position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_bd0l7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_vx148")
+texture = ExtResource("2_4sk0d")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -62.0

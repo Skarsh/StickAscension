@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1u4bv06f4mxt"
-path="res://.godot/imported/EnemyCardSlime.png-0f5a3163476ff17ad1163aa9c30d3b0f.ctex"
+uid="uid://druubvx4s1fk"
+path="res://.godot/imported/Slime_version_2_2_merged_10xScaled.png-1393bd512d50020d4958f5338c5576a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/EnemyCardSlime.png"
-dest_files=["res://.godot/imported/EnemyCardSlime.png-0f5a3163476ff17ad1163aa9c30d3b0f.ctex"]
+source_file="res://sprites/Slime_version_2_2_merged_10xScaled.png"
+dest_files=["res://.godot/imported/Slime_version_2_2_merged_10xScaled.png-1393bd512d50020d4958f5338c5576a2.ctex"]
 
 [params]
 

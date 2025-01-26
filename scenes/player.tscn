@@ -12,9 +12,10 @@ bg_color = Color(0.26, 0.0546, 0.0546, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5wf1"]
 bg_color = Color(0.6, 0.066, 0.066, 1)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_bar")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("health_bar", "sprite")]
 script = ExtResource("1_j77lh")
 health_bar = NodePath("HealthBar")
+sprite = NodePath("Sprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, -4)

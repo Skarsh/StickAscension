@@ -157,7 +157,7 @@ text = "Run"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")
-volume_db = -23.257
+volume_db = -56.131
 autoplay = true
 
 [node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
