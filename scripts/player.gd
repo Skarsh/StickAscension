@@ -3,9 +3,17 @@ extends CharacterBody2D
 class_name Player
 
 @export var health_bar: ProgressBar
+@export var sprite: Sprite2D
+
+enum WeaponKind {Stick, Staff, Spear, Sword}
 
 var alive: bool = true
 var stats: Stats
+var gold: int
+var kind: WeaponKind
+
+func setup(new_kind: WeaponKind) -> void:
+	kind = new_kind
 
 func take_damage(amount: int) -> bool:
 	alive = stats.take_damage(amount)

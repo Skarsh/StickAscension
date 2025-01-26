@@ -6,7 +6,7 @@ var enemies: Array[Enemy]
 
 var enemy_scene = preload("res://scenes/enemy.tscn")
 
-var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
+var slime_texture = preload("res://sprites/Slime_version_2_2_merged_10xScaled.png")
 var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
 var black_knight_texture = preload("res://sprites/EnemyCardBlackKnigh_Version_1_Merged_10xScaled.png")
 var demon_texutre = preload("res://sprites/EnemyCardDemon_Version_1_Merged_10xScaled.png")
@@ -20,6 +20,7 @@ func random_enemy_kind() -> Enemy.EnemyKind:
 
 func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 	var enemy_instance = enemy_scene.instantiate()
+	enemy_instance.setup(kind)
 	parent.add_child(enemy_instance)
 
 	# TODO(Thomas): Should make the slime scaled the same as the others
@@ -28,6 +29,7 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 			enemy_instance.stats = Stats.new(100, 7, 2, 3)
 			enemy_instance.sprite.texture = slime_texture
 			enemy_instance.scale *= 2
+			enemy_instance.sprite.scale /= 10
 		Enemy.EnemyKind.Wolf:
 			enemy_instance.stats = Stats.new(200, 12, 4, 5)
 			enemy_instance.sprite.texture = wolf_texture
@@ -56,5 +58,3 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 
 func despawn(node: Node2D):
 	node.queue_free()
-
-

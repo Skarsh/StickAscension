@@ -17,9 +17,6 @@ var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic
 var player_scene = preload("res://scenes/player.tscn")
 var enemy_scene = preload("res://scenes/enemy.tscn")
 
-var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
-var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
-
 var player_instance
 var enemy_instance
 var slime_enemy_instance
@@ -35,12 +32,14 @@ func _ready() -> void:
 	enemy_attack_timer.timeout.connect(_on_enemy_attack_timer_timeout)
 
 	player_instance = player_scene.instantiate()
+	player_instance.setup(Player.WeaponKind.Stick)
 	add_child(player_instance)
+
 	player_instance.scale *= 2
 	player_instance.position = Vector2(-500, 0)
 	player_instance.hide()
 
-	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
+	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Slime)
 
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
@@ -94,6 +93,7 @@ func _on_enemy_attack_timer_timeout() -> void:
 		perform_attack_animation(enemy_instance, player_instance, func():
 			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
 			# TODO(Thomas): What to do when the player dies?
+			# Go to shop
 		)
 		sound_player.stream = stick_hit_sound
 		sound_player.play()
@@ -118,8 +118,16 @@ func _on_attack_pressed() -> void:
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
 			if not alive:
+				# TODO(Thomas): This needs to change a bit if we add more items that can be dropped
+				var gold_drop = enemy_instance.generate_drop()
+				player_instance.gold += gold_drop
+				print(player_instance.gold)
+
+				# Despawn
 				enemy_instance.hide()
 				spawner.despawn(enemy_instance)
+
+				# Spawn
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
 		)
