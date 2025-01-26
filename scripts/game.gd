@@ -102,6 +102,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
+			print(alive)
 			if not alive:
 				spawner.despawn(enemy_instance)
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
