@@ -61,3 +61,4 @@ func update_stats():
 	$ATK.text = stats.atk_string()
 	$DEF.text = stats.def_string()
 	$AP.text = stats.ap_string()
+

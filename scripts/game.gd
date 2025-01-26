@@ -3,6 +3,8 @@ extends Node2D
 @onready var camera: Camera2D = $Camera2D
 @onready var mission_text: MissionText = $CanvasLayer/MissionTextPanelContainer
 @onready var interaction_buttons: HBoxContainer = $CanvasLayer/InteractionButtons
+@onready var gold_label: Label = $CanvasLayer/Gold/Label
+
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sound_player: AudioStreamPlayer = $SoundPlayer
 
@@ -13,6 +15,7 @@ extends Node2D
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
 var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
+var button_entered_sound = preload("res://sounds/MenuHoverBop.wav")
 
 var player_scene = preload("res://scenes/player.tscn")
 var enemy_scene = preload("res://scenes/enemy.tscn")
@@ -32,15 +35,13 @@ func _ready() -> void:
 	enemy_attack_timer.timeout.connect(_on_enemy_attack_timer_timeout)
 
 	player_instance = player_scene.instantiate()
-	player_instance.setup(Player.WeaponKind.Stick)
 	add_child(player_instance)
-
 	player_instance.scale *= 2
 	player_instance.sprite.scale /= 10
 	player_instance.position = Vector2(-500, 0)
 	player_instance.hide()
 
-	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Slime)
+	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
 
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
@@ -94,7 +95,6 @@ func _on_enemy_attack_timer_timeout() -> void:
 		perform_attack_animation(enemy_instance, player_instance, func():
 			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
 			# TODO(Thomas): What to do when the player dies?
-			# Go to shop
 		)
 		sound_player.stream = stick_hit_sound
 		sound_player.play()
@@ -116,23 +116,21 @@ func _on_ok_button_pressed() -> void:
 	
 func _on_attack_pressed() -> void:
 	if game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
-
-		# TODO(Thomas): Remove this, just for goofy testing
-		player_instance.change_weapon_kind(player_instance.random_weapon_kind())
-
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
 			if not alive:
-				# TODO(Thomas): This needs to change a bit if we add more items that can be dropped
-				var gold_drop = enemy_instance.generate_drop()
-				player_instance.gold += gold_drop
-				print(player_instance.gold)
+
+				# Drops
+				var gold_amount = enemy_instance.generate_drop()
+				player_instance.gold += gold_amount
+				gold_label.text = str(player_instance.gold)
+
 
 				# Despawn
 				enemy_instance.hide()
 				spawner.despawn(enemy_instance)
 
-				# Spawn
+				#Spawn
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
 		)
@@ -142,3 +140,7 @@ func _on_attack_pressed() -> void:
 
 		# It's not time for the enemy to attack us
 		start_enemy_attack_timer()
+
+
+func _on_attack_mouse_entered() -> void:
+	pass
