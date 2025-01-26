@@ -2,10 +2,18 @@ extends Resource
 
 class_name Stats
 
+var max_health: int
 var health: int
 var atk: int
 var def: int
 var ap: int
+
+func _init(new_max_health: int, new_atk: int, new_def: int, new_ap: int):
+	max_health = new_max_health
+	health = new_max_health
+	atk = new_atk
+	def = new_def
+	ap = new_ap
 
 func health_string() -> String:
 	return "HP: " + str(health)
