@@ -101,7 +101,8 @@ func _on_enemy_attack_timer_timeout() -> void:
 		player_turn = true
 
 func _process(delta: float) -> void:	
-	pass
+	if Input.is_action_just_pressed("ui_accept"):  # Checks for Enter key
+		get_tree().change_scene_to_file("res://scenes/shop.tscn")
 		
 func _on_ok_button_pressed() -> void:
 	mission_text.hide()
