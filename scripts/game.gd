@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var camera: Camera2D = $Camera2D
 @onready var mission_text: MissionText = $CanvasLayer/MissionTextPanelContainer
+@onready var interaction_buttons: HBoxContainer = $CanvasLayer/InteractionButtons
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sound_player: AudioStreamPlayer = $SoundPlayer
 
@@ -14,6 +15,10 @@ var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epi
 var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
 
 var player_scene = preload("res://scenes/player.tscn")
+var enemy_scene = preload("res://scenes/enemy.tscn")
+
+var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
+var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
 
 var player_instance
 var enemy_instance
@@ -35,7 +40,7 @@ func _ready() -> void:
 	player_instance.position = Vector2(-500, 0)
 	player_instance.hide()
 
-	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
+	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
 
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
@@ -95,11 +100,25 @@ func _on_enemy_attack_timer_timeout() -> void:
 		player_turn = true
 
 func _process(delta: float) -> void:	
-	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
+	pass
+		
+func _on_ok_button_pressed() -> void:
+	mission_text.hide()
+	mission_text.stop_typing_effect()
+	player_instance.show()
+	enemy_instance.show()
+	audio_player.stream = battle_music
+	audio_player.play()
+	game_active = true
+	interaction_buttons.show()
+
+	
+func _on_attack_pressed() -> void:
+	if game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
-			print(alive)
 			if not alive:
+				enemy_instance.hide()
 				spawner.despawn(enemy_instance)
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
@@ -110,14 +129,3 @@ func _process(delta: float) -> void:
 
 		# It's not time for the enemy to attack us
 		start_enemy_attack_timer()
-		
-func _on_ok_button_pressed() -> void:
-	mission_text.hide()
-	mission_text.stop_typing_effect()
-	player_instance.show()
-	enemy_instance.show()
-	audio_player.stream = battle_music
-	audio_player.play()
-	game_active = true
-
-	
