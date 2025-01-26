@@ -1,17 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://cwfoiqu4ta7o2"]
+[gd_scene load_steps=9 format=3 uid="uid://cwfoiqu4ta7o2"]
 
 [ext_resource type="Texture2D" uid="uid://c6f2hkh2bgigk" path="res://images/Background.png" id="1_q6nfu"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_w7hsy"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="2_7d7ee"]
 [ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="6_ufe5y"]
+[ext_resource type="Script" path="res://scripts/spawner.gd" id="7_tflug"]
 [ext_resource type="Script" path="res://scripts/mission_text.gd" id="8_eknqy"]
 [ext_resource type="AudioStream" uid="uid://ckavuu7ijlm48" path="res://sounds/ES_Handwriting, Pen On Paper, Writing 02 - Epidemic Sound.mp3" id="9_kxj33"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vtx0"]
 bg_color = Color(0.6, 0.06, 0.06, 1)
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("spawner")]
 script = ExtResource("1_w7hsy")
+spawner = NodePath("Spawner")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -199,5 +201,8 @@ volume_db = -11.417
 autoplay = true
 
 [node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Spawner" type="Node" parent="."]
+script = ExtResource("7_tflug")
 
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]

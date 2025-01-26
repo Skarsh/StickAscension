@@ -7,6 +7,8 @@ extends Node2D
 
 @onready var enemy_attack_timer: Timer = Timer.new()
 
+@export var spawner: Spawner
+
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
 var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
@@ -14,8 +16,12 @@ var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic
 var player_scene = preload("res://scenes/player.tscn")
 var enemy_scene = preload("res://scenes/enemy.tscn")
 
+var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
+var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
+
 var player_instance
 var enemy_instance
+var slime_enemy_instance
 
 var game_active = false
 var player_turn = true
@@ -33,11 +39,8 @@ func _ready() -> void:
 	player_instance.position = Vector2(-500, 0)
 	player_instance.hide()
 
-	enemy_instance = enemy_scene.instantiate()
-	add_child(enemy_instance)
-	enemy_instance.scale *= 2
-	enemy_instance.position = Vector2(500, 0)
-	enemy_instance.hide()
+	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
+
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
 	if is_animating:
@@ -99,7 +102,10 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
-			# TODO(Thomas): Add despawning of enemy and spawning of new enemy
+			if not alive:
+				spawner.despawn(enemy_instance)
+				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
+				enemy_instance.show()
 		)
 		sound_player.stream = slime_hit_sound
 		sound_player.play()
