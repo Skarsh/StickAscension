@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b75vuww6tsqo2"
-path="res://.godot/imported/PlayerCardStick2.png-46101aed1b06be8bc3d5d2ec96977681.ctex"
+uid="uid://blgg7dgubs00r"
+path="res://.godot/imported/Stick_Version_3_Merged_10xScaled.png-186e4adac126f7934ae439f74aacb11e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/PlayerCardStick2.png"
-dest_files=["res://.godot/imported/PlayerCardStick2.png-46101aed1b06be8bc3d5d2ec96977681.ctex"]
+source_file="res://sprites/Stick_Version_3_Merged_10xScaled.png"
+dest_files=["res://.godot/imported/Stick_Version_3_Merged_10xScaled.png-186e4adac126f7934ae439f74aacb11e.ctex"]
 
 [params]
 

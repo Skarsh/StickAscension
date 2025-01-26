@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ccstjowtyxv8t"]
 
-[ext_resource type="Texture2D" uid="uid://b75vuww6tsqo2" path="res://sprites/PlayerCardStick2.png" id="1_dp0s6"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_j77lh"]
+[ext_resource type="Texture2D" uid="uid://blgg7dgubs00r" path="res://sprites/Stick_Version_3_Merged_10xScaled.png" id="2_swvk6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xskod"]
 size = Vector2(124, 160)
@@ -22,7 +22,7 @@ position = Vector2(1, -4)
 shape = SubResource("RectangleShape2D_xskod")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_dp0s6")
+texture = ExtResource("2_swvk6")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -62.0

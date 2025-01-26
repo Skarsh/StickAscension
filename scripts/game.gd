@@ -36,6 +36,7 @@ func _ready() -> void:
 	add_child(player_instance)
 
 	player_instance.scale *= 2
+	player_instance.sprite.scale /= 10
 	player_instance.position = Vector2(-500, 0)
 	player_instance.hide()
 
@@ -115,6 +116,10 @@ func _on_ok_button_pressed() -> void:
 	
 func _on_attack_pressed() -> void:
 	if game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
+
+		# TODO(Thomas): Remove this, just for goofy testing
+		player_instance.change_weapon_kind(player_instance.random_weapon_kind())
+
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
 			if not alive:

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ngm86t5kikq3"
-path="res://.godot/imported/Revolver2.png-1ae9eb9af637d54427cc95ab96166d00.ctex"
+uid="uid://x1eve884b0kw"
+path="res://.godot/imported/Revolver_version_2_10xScaled.png-cf4a53fddd471d826997387fb4566201.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/Revolver2.png"
-dest_files=["res://.godot/imported/Revolver2.png-1ae9eb9af637d54427cc95ab96166d00.ctex"]
+source_file="res://sprites/Revolver_version_2_10xScaled.png"
+dest_files=["res://.godot/imported/Revolver_version_2_10xScaled.png-cf4a53fddd471d826997387fb4566201.ctex"]
 
 [params]
 

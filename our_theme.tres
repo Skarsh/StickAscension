@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ckr7tq23s5t32" path="res://ui/PanelTest.png" id="1_gcmde"]
 [ext_resource type="Texture2D" uid="uid://druubvx4s1fk" path="res://sprites/Slime_version_2_2_merged_10xScaled.png" id="3_hooax"]
 [ext_resource type="Texture2D" uid="uid://ko4ighcht2tp" path="res://ui/EnemyCardEmpty1.png" id="3_i0mh2"]
-[ext_resource type="Texture2D" uid="uid://b75vuww6tsqo2" path="res://sprites/PlayerCardStick2.png" id="4_j0oss"]
+[ext_resource type="Texture2D" uid="uid://blgg7dgubs00r" path="res://sprites/Stick_Version_3_Merged_10xScaled.png" id="5_dyxb7"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v2qrn"]
 texture = ExtResource("1_gcmde")
@@ -24,7 +24,7 @@ texture_margin_right = 24.0
 texture_margin_bottom = 24.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1wluk"]
-texture = ExtResource("4_j0oss")
+texture = ExtResource("5_dyxb7")
 
 [resource]
 BigPanelContainer/base_type = &"PanelContainer"
