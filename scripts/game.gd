@@ -86,18 +86,20 @@ func start_enemy_attack_timer() -> void:
 	enemy_attack_timer.start(delay)
 
 func _on_enemy_attack_timer_timeout() -> void:
-	if game_active and not player_turn and not is_animating:
+	if game_active and not player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(enemy_instance, player_instance, func():
-			player_instance.take_damage(enemy_instance.attack(player_instance.stats))
+			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
+			# TODO(Thomas): What to do when the player dies?
 		)
 		sound_player.stream = stick_hit_sound
 		sound_player.play()
 		player_turn = true
 
 func _process(delta: float) -> void:	
-	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating:
+	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(player_instance, enemy_instance, func():
-			enemy_instance.take_damage(player_instance.attack(enemy_instance.stats))
+			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
+			# TODO(Thomas): Add despawning of enemy and spawning of new enemy
 		)
 		sound_player.stream = slime_hit_sound
 		sound_player.play()

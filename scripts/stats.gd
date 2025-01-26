@@ -2,10 +2,10 @@ extends Resource
 
 class_name Stats
 
-var health: int = 100
-var atk: int = 10
-var def: int = 3
-var ap: int = 10
+var health: int
+var atk: int
+var def: int
+var ap: int
 
 func health_string() -> String:
 	return "HP: " + str(health)
@@ -18,3 +18,18 @@ func def_string() -> String:
 
 func ap_string() -> String:
 	return "AP: " + str(ap)
+
+func calculate_damage(attacker: Stats) -> int:
+	if def >= attacker.atk:
+		return 0
+
+	return attacker.atk - def
+
+func take_damage(amount: int) -> bool:
+	var alive = true
+	if health - amount <= 0:
+		health = 0
+		alive = false
+	else:
+		health -= amount
+	return alive
