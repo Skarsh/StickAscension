@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 class_name Enemy
 
-enum EnemyKind {Slime, Wolf, Demon, Eldritch}
+enum EnemyKind {Slime, BlackKnight, Wolf, Demon, Eldritch}
 
 @export var health_bar: ProgressBar
 @export var sprite: Sprite2D

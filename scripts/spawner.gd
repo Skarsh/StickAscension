@@ -8,6 +8,7 @@ var enemy_scene = preload("res://scenes/enemy.tscn")
 
 var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
 var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
+var black_knight_texture = preload("res://sprites/EnemyCardBlackKnigh_Version_1_Merged_10xScaled.png")
 var demon_texutre = preload("res://sprites/EnemyCardDemon_Version_1_Merged_10xScaled.png")
 var eldritch_texture = preload("res://sprites/EnemyCardEldritchBeast_version_1_Merged_10xScaled.png")
 
@@ -30,6 +31,11 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 		Enemy.EnemyKind.Wolf:
 			enemy_instance.stats = Stats.new(200, 12, 4, 5)
 			enemy_instance.sprite.texture = wolf_texture
+			enemy_instance.scale *= 2
+			enemy_instance.sprite.scale /= 10
+		Enemy.EnemyKind.BlackKnight:
+			enemy_instance.stats = Stats.new(250, 15, 7, 6)
+			enemy_instance.sprite.texture = black_knight_texture
 			enemy_instance.scale *= 2
 			enemy_instance.sprite.scale /= 10
 		Enemy.EnemyKind.Demon:

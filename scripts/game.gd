@@ -14,10 +14,6 @@ var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epi
 var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
 
 var player_scene = preload("res://scenes/player.tscn")
-var enemy_scene = preload("res://scenes/enemy.tscn")
-
-var slime_texture = preload("res://sprites/Slime_version_2_Merged.png")
-var wolf_texture = preload("res://sprites/EnemyCardDireWolf_version_2_Merged_10xScaled..png")
 
 var player_instance
 var enemy_instance
