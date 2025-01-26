@@ -5,6 +5,8 @@ extends Node2D
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var sound_player: AudioStreamPlayer = $SoundPlayer
 
+@onready var enemy_attack_timer: Timer = Timer.new()
+
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
 var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
@@ -20,6 +22,10 @@ var player_turn = true
 var is_animating = false
 
 func _ready() -> void:
+
+	add_child(enemy_attack_timer)
+	enemy_attack_timer.one_shot = true
+	enemy_attack_timer.timeout.connect(_on_enemy_attack_timer_timeout)
 
 	player_instance = player_scene.instantiate()
 	add_child(player_instance)
@@ -57,15 +63,14 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	# Forward attack animation
 	tween.tween_method(
 		func(t: float):
-			# Quadratic Bezier curve
 			var q0 = start_pos.lerp(control_point, t)
 			var q1 = control_point.lerp(target_pos, t)
 			attacker.position = q0.lerp(q1, t), 0.0, 1.0, attack_duration
 	)
 
+	# Return attack animation
 	tween.tween_method(
 		func(t: float):
-			# Quadratic Bezier curve
 			var q0 = target_pos.lerp(control_point, t)
 			var q1 = control_point.lerp(start_pos, t)
 			attacker.position = q0.lerp(q1, t), 0.0, 1.0, return_duration
@@ -76,6 +81,19 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 		on_complete.call()
 	)
 
+func start_enemy_attack_timer() -> void:
+	var delay = randf_range(1.0, 2.0)
+	enemy_attack_timer.start(delay)
+
+func _on_enemy_attack_timer_timeout() -> void:
+	if game_active and not player_turn and not is_animating:
+		perform_attack_animation(enemy_instance, player_instance, func():
+			player_instance.take_damage(enemy_instance.attack(player_instance.stats))
+		)
+		sound_player.stream = stick_hit_sound
+		sound_player.play()
+		player_turn = true
+
 func _process(delta: float) -> void:	
 	if Input.is_action_just_pressed("ui_accept") and game_active and player_turn and not is_animating:
 		perform_attack_animation(player_instance, enemy_instance, func():
@@ -85,13 +103,8 @@ func _process(delta: float) -> void:
 		sound_player.play()
 		player_turn = false
 
-	elif Input.is_action_just_pressed("ui_accept") and game_active and not player_turn and not is_animating:
-		perform_attack_animation(enemy_instance, player_instance, func():
-			player_instance.take_damage(enemy_instance.attack(player_instance.stats))
-		)
-		sound_player.stream = stick_hit_sound
-		sound_player.play()
-		player_turn = true
+		# It's not time for the enemy to attack us
+		start_enemy_attack_timer()
 		
 func _on_ok_button_pressed() -> void:
 	mission_text.hide()
