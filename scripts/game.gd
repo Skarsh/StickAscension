@@ -39,7 +39,16 @@ func _ready() -> void:
 	player_instance.scale *= 2
 	player_instance.sprite.scale /= 10
 	player_instance.position = Vector2(-500, 0)
+
+	# TODO(Thomas): Set more of the previous player state, e.g weaponkind, stats etc
+	if GameState.started == true:
+		player_instance.gold = GameState.player_gold
+	else:
+		GameState.started = true
+
 	player_instance.hide()
+	gold_label.text = str(player_instance.gold)
+
 
 	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
 
@@ -102,17 +111,12 @@ func _on_enemy_attack_timer_timeout() -> void:
 
 func _process(delta: float) -> void:	
 	if Input.is_action_just_pressed("ui_accept"):  # Checks for Enter key
+		# TODO(Thomas): Set more of the game state here
+		GameState.player_gold = player_instance.gold
 		get_tree().change_scene_to_file("res://scenes/shop.tscn")
 		
 func _on_ok_button_pressed() -> void:
-	mission_text.hide()
-	mission_text.stop_typing_effect()
-	player_instance.show()
-	enemy_instance.show()
-	audio_player.stream = battle_music
-	audio_player.play()
-	game_active = true
-	interaction_buttons.show()
+	start_battle_scene()
 
 	
 func _on_attack_pressed() -> void:
@@ -145,3 +149,13 @@ func _on_attack_pressed() -> void:
 
 func _on_attack_mouse_entered() -> void:
 	pass
+
+func start_battle_scene() -> void:
+	mission_text.hide()
+	mission_text.stop_typing_effect()
+	player_instance.show()
+	enemy_instance.show()
+	audio_player.stream = battle_music
+	audio_player.play()
+	game_active = true
+	interaction_buttons.show()
