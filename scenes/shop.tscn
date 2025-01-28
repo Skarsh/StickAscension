@@ -215,7 +215,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OkButton" type="Button" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer"]
+[node name="BuyButton" type="Button" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Buy"
@@ -238,4 +238,5 @@ stream = ExtResource("6_o6ln6")
 [connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2" to="." method="_on_item_2_mouse_exited"]
 [connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3" to="." method="_on_item_3_mouse_entered"]
 [connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3" to="." method="_on_item_3_mouse_exited"]
+[connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
