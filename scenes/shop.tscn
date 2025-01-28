@@ -1,16 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://d16txpx0437sm"]
+[gd_scene load_steps=10 format=3 uid="uid://d16txpx0437sm"]
 
 [ext_resource type="Script" path="res://scripts/shop.gd" id="1_5shy3"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="1_ndm4j"]
 [ext_resource type="Texture2D" uid="uid://dg36ud8yxcdii" path="res://sprites/Coin_version_3_5xScaled.png" id="1_vpxoa"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="3_2gwwh"]
+[ext_resource type="Texture2D" uid="uid://ck1kbfsg8l3f" path="res://sprites/health_temp.png" id="5_kqs1a"]
 [ext_resource type="AudioStream" uid="uid://ckavuu7ijlm48" path="res://sounds/ES_Handwriting, Pen On Paper, Writing 02 - Epidemic Sound.mp3" id="6_o6ln6"]
+[ext_resource type="Texture2D" uid="uid://ci4ljxerfxf6m" path="res://sprites/atk_temp.png" id="6_wj5ci"]
+[ext_resource type="Texture2D" uid="uid://cky8u5qikv64p" path="res://sprites/def_temp.png" id="7_bdqov"]
+[ext_resource type="Texture2D" uid="uid://d2kiyc46nesab" path="res://sprites/ap_temp.png" id="8_osil5"]
 
-[node name="Shop" type="Node2D" node_paths=PackedStringArray("Item1", "Item2", "Item3")]
+[node name="Shop" type="Node2D" node_paths=PackedStringArray("Item1", "Item2", "Item3", "Item4")]
 script = ExtResource("1_5shy3")
 Item1 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1")
 Item2 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2")
 Item3 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3")
+Item4 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -166,6 +171,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "This is a shop, here you can buy upgrades..."
+horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="Spacer" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer"]
@@ -177,26 +183,43 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="ItemsBeforeSpace" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+[node name="Space1" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Item1" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
+size_flags_vertical = 0
+texture_normal = ExtResource("5_kqs1a")
+
+[node name="Space2" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("3_2gwwh")
 
 [node name="Item2" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
+size_flags_vertical = 0
+texture_normal = ExtResource("6_wj5ci")
+
+[node name="Space3" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("3_2gwwh")
 
 [node name="Item3" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
-size_flags_horizontal = 3
-texture_normal = ExtResource("3_2gwwh")
+size_flags_vertical = 0
+texture_normal = ExtResource("7_bdqov")
 
-[node name="ItemsAfterSpace" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+[node name="Space4" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Item4" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
+layout_mode = 2
+size_flags_vertical = 0
+texture_normal = ExtResource("8_osil5")
+
+[node name="Space5" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -238,5 +261,7 @@ stream = ExtResource("6_o6ln6")
 [connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2" to="." method="_on_item_2_mouse_exited"]
 [connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3" to="." method="_on_item_3_mouse_entered"]
 [connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3" to="." method="_on_item_3_mouse_exited"]
+[connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4" to="." method="_on_item_4_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4" to="." method="_on_item_4_mouse_exited"]
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

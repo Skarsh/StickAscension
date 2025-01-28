@@ -43,12 +43,14 @@ func _ready() -> void:
 	# TODO(Thomas): Set more of the previous player state, e.g weaponkind, stats etc
 	if GameState.started == true:
 		player_instance.gold = GameState.player_gold
+		player_instance.stats = GameState.player_stats
+		player_instance.update_stats()
 	else:
 		GameState.started = true
+		GameState.player_stats = player_instance.stats
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
-
 
 	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
 
@@ -102,8 +104,8 @@ func start_enemy_attack_timer() -> void:
 func _on_enemy_attack_timer_timeout() -> void:
 	if game_active and not player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(enemy_instance, player_instance, func():
-			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
 			# TODO(Thomas): What to do when the player dies?
+			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
 		)
 		sound_player.stream = stick_hit_sound
 		sound_player.play()
