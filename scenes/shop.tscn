@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://pwibxovgn04n" path="res://sprites/health_icon.png" id="5_gyo4l"]
 [ext_resource type="Texture2D" uid="uid://bnbdy7jpmdi8d" path="res://sprites/atk_icon.png" id="6_d2ihl"]
 [ext_resource type="Texture2D" uid="uid://coohi3fceu2kr" path="res://sprites/def_icon.png" id="7_ceoxa"]
-[ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="9_aoeqg"]
+[ext_resource type="AudioStream" uid="uid://clkjs3x14agbj" path="res://music/ShopMusic.mp3" id="8_3nwsi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3u75"]
 bg_color = Color(0.465602, 0.673338, 0.224338, 1)
@@ -355,8 +355,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9_aoeqg")
-volume_db = -52.655
+stream = ExtResource("8_3nwsi")
+volume_db = -21.395
 autoplay = true
 
 [connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1" to="." method="_on_item_1_mouse_entered"]
