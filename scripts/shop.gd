@@ -34,10 +34,10 @@ var selected_style = StyleBoxFlat.new()
 func _ready() -> void:
 	update_ui()
 
-	items.append(Item.new(5, ItemKind.Health, 1))
-	items.append(Item.new(10, ItemKind.Atk, 1))
-	items.append(Item.new(15, ItemKind.Def, 1))
-	items.append(Item.new(20, ItemKind.Ap, 1))
+	items.append(Item.new(100, ItemKind.Health, 1))
+	items.append(Item.new(200, ItemKind.Atk, 1))
+	items.append(Item.new(300, ItemKind.Def, 1))
+	items.append(Item.new(400, ItemKind.Ap, 1))
 
 	# Configure the selection border style
 	selected_style.border_color = Color.WHITE
@@ -129,7 +129,6 @@ func start_tween(object, property, final_value, duration):
 	var tween = create_tween()
 	tween.tween_property(object, property, final_value, duration)
 
-
 func _on_buy_button_pressed() -> void:
 	var item: Item
 	if selected_button == Item1:
@@ -155,13 +154,19 @@ func _on_buy_button_pressed() -> void:
 		GameState.gold_spent += item.cost
 
 	update_ui()
+	update_levels()
 	
 func update_ui() -> void:
 	gold_label.text = str(GameState.player_gold)
-	gold_spent_progressbar.value = GameState.gold_spent / float(GameState.next_level) * 100
+	gold_spent_progressbar.value = GameState.gold_spent / float(GameState.get_next_gold_spent_needed_for_level()) * 100
 
 	HealthLabel.text = "Health: " + str(GameState.player_stats.max_health)
 	AtkLabel.text = "Atk: " + str(GameState.player_stats.atk)
 	DefLabel.text = "Def: " + str(GameState.player_stats.def)
 	ApLabel.text = "Ap: " + str(GameState.player_stats.ap)
 
+func update_levels() -> void:
+	# TOOD(Thomas): Deal with Max Level stuff
+	var gold_needed = GameState.get_next_gold_spent_needed_for_level()
+	if GameState.gold_spent >= gold_needed:
+		GameState.increment_next_level()

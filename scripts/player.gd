@@ -48,7 +48,7 @@ func take_damage(amount: int) -> bool:
 	return alive
 
 func _ready() -> void:
-	stats = Stats.new(100, 100, 100, 4)
+	stats = Stats.new(100, 3000, 100, 4)
 	update_stats()
 
 func _process(delta: float) -> void:

@@ -13,6 +13,8 @@ extends Node2D
 
 @export var spawner: Spawner
 
+@onready var emitter = $CanvasLayer/MissionTextPanelContainer
+
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 
 var stick_attack_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
@@ -59,7 +61,9 @@ func _ready() -> void:
 	else:
 		GameState.started = true
 		GameState.player_stats = player_instance.stats
-		GameState.next_level = GameState.LEVEL_2_GOLD
+		
+		# TODO(Thomas): Need better initialization stuff
+		GameState.next_level = 2
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
