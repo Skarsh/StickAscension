@@ -45,6 +45,8 @@ var is_animating = false
 const PLAYER_SCALE = 2.5
 const PLAYER_SPRITE_SCALE = 10
 
+const DEATH_PENALTY = 0.8
+
 func _ready() -> void:
 
 	add_child(enemy_attack_timer)
@@ -128,6 +130,9 @@ func _on_enemy_attack_timer_timeout() -> void:
 		perform_attack_animation(enemy_instance, player_instance, func():
 			# TODO(Thomas): What to do when the player dies?
 			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
+			if not alive:
+				GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
+				get_tree().change_scene_to_file("res://scenes/shop.tscn")
 		)
 
 		match enemy_instance.kind:
@@ -161,8 +166,8 @@ func _on_attack_pressed() -> void:
 
 				# Drops
 				var gold_amount = enemy_instance.generate_drop()
-				player_instance.gold += gold_amount
-				gold_label.text = str(player_instance.gold)
+				GameState.player_gold += gold_amount
+				gold_label.text = str(GameState.player_gold)
 
 				# Despawn
 				enemy_instance.hide()
@@ -203,7 +208,6 @@ func start_battle_scene() -> void:
 	interaction_buttons.show()
 
 func _on_escape_pressed() -> void:
-	GameState.player_gold = player_instance.gold
 	get_tree().change_scene_to_file("res://scenes/shop.tscn")
 
 func _on_mission_text_panel_container_start_battle_scene_signal() -> void:

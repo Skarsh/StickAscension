@@ -13,7 +13,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3u75"]
 bg_color = Color(0.465602, 0.673338, 0.224338, 1)
 
-[node name="Shop" type="Node2D" node_paths=PackedStringArray("gold_spent_progressbar", "Item1", "Item2", "Item3", "Item4", "HealthLabel", "AtkLabel", "DefLabel", "ApLabel")]
+[node name="Shop" type="Node2D" node_paths=PackedStringArray("gold_spent_progressbar", "Item1", "Item2", "Item3", "Item4", "HealthLabel", "AtkLabel", "DefLabel", "ApLabel", "HealthCostLabel", "AtkCostLabel", "DefCostLabel", "ApCostLabel")]
 script = ExtResource("1_5shy3")
 gold_spent_progressbar = NodePath("CanvasLayer/ProgressBar")
 Item1 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1")
@@ -24,6 +24,10 @@ HealthLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Item
 AtkLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer/AtkLabel")
 DefLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer/DefLabel")
 ApLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer/ApLabel")
+HealthCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2/HBoxContainer/HealthCostLabel")
+AtkCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer/AtkCostLabel")
+DefCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer/DefCostLabel")
+ApCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer/ApCostLabel")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -193,7 +197,6 @@ theme_override_colors/font_color = Color(0.396513, 0.213291, 0.160654, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
-text = "This is a shop, here you can buy upgrades..."
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -234,6 +237,46 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "Health: 100"
 
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 305
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2"]
+layout_mode = 2
+
+[node name="HealthCostLabel" type="Label" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.674608, 0.412615, 0.0939673, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
+text = "Cost: 100"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_vpxoa")
+expand_mode = 2
+
 [node name="Space2" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -263,6 +306,45 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "Atk: 100"
 
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 315
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2"]
+layout_mode = 2
+
+[node name="AtkCostLabel" type="Label" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.674608, 0.412615, 0.0939673, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
+text = "Cost: 100"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_vpxoa")
+expand_mode = 2
+
 [node name="Space3" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -291,6 +373,45 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "Def: 100"
 
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 315
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2"]
+layout_mode = 2
+
+[node name="DefCostLabel" type="Label" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.674608, 0.412615, 0.0939673, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
+text = "Cost: 100"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_vpxoa")
+expand_mode = 2
+
 [node name="Space4" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -318,6 +439,45 @@ theme_override_colors/font_color = Color(0.221483, 0.484465, 0.226908, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 48
 text = "Ap: 100"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 315
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2"]
+layout_mode = 2
+
+[node name="ApCostLabel" type="Label" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.674608, 0.412615, 0.0939673, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 34
+text = "Cost: 100"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("1_vpxoa")
+expand_mode = 2
 
 [node name="Space5" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
@@ -357,7 +517,7 @@ size_flags_horizontal = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_3nwsi")
-volume_db = -21.395
+volume_db = -16.613
 autoplay = true
 
 [connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1" to="." method="_on_item_1_mouse_entered"]

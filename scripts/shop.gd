@@ -12,6 +12,15 @@ extends Node
 @export var DefLabel: Label
 @export var ApLabel: Label
 
+@export var HealthCostLabel: Label
+@export var AtkCostLabel: Label
+@export var DefCostLabel: Label
+@export var ApCostLabel: Label
+
+const BASE_HEALTH_COST = 100
+const BASE_ATK_COST = 200
+const BASE_DEF_COST = 300
+const BASE_AP_COST = 400
 
 enum ItemKind{Health, Atk, Def, Ap}
 
@@ -34,10 +43,10 @@ var selected_style = StyleBoxFlat.new()
 func _ready() -> void:
 	update_ui()
 
-	items.append(Item.new(100, ItemKind.Health, 1))
-	items.append(Item.new(200, ItemKind.Atk, 1))
-	items.append(Item.new(300, ItemKind.Def, 1))
-	items.append(Item.new(400, ItemKind.Ap, 1))
+	items.append(Item.new(BASE_HEALTH_COST, ItemKind.Health, 1))
+	items.append(Item.new(BASE_ATK_COST, ItemKind.Atk, 1))
+	items.append(Item.new(BASE_DEF_COST, ItemKind.Def, 1))
+	items.append(Item.new(BASE_AP_COST, ItemKind.Ap, 1))
 
 	# Configure the selection border style
 	selected_style.border_color = Color.WHITE
@@ -164,6 +173,11 @@ func update_ui() -> void:
 	AtkLabel.text = "Atk: " + str(GameState.player_stats.atk)
 	DefLabel.text = "Def: " + str(GameState.player_stats.def)
 	ApLabel.text = "Ap: " + str(GameState.player_stats.ap)
+
+	HealthCostLabel.text = "Cost: " + str(BASE_HEALTH_COST)
+	AtkCostLabel.text = "Cost: " + str(BASE_ATK_COST)
+	DefCostLabel.text = "Cost: " + str(BASE_DEF_COST)
+	ApCostLabel.text = "Cost: " + str(BASE_AP_COST)
 
 func update_levels() -> void:
 	# TOOD(Thomas): Deal with Max Level stuff

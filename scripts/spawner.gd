@@ -16,6 +16,9 @@ var eldritch_texture = preload("res://sprites/EnemyCardEldritchBeast_version_1_M
 const ENEMY_SCALE = 2.5
 const ENEMY_SPRITE_SCALE = 10
 
+const BASE_SPAWN_LEVEL = 1
+const ENEMIES_PER_LEVEL = 3
+
 func random_enemy_kind() -> Enemy.EnemyKind:
 	# Get the current level from game state
 	var current_level = GameState.next_level - 1
@@ -75,17 +78,17 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 	# TODO(Thomas): Should make the slime scaled the same as the others
 	match kind:
 		Enemy.EnemyKind.Slime:
-			enemy_instance.stats = Stats.new(80, 5, 1, 2)
+			enemy_instance.stats = Stats.new(20, 5, 1, 1)
 			enemy_instance.sprite.texture = slime_texture
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
 		Enemy.EnemyKind.Wolf:
-			enemy_instance.stats = Stats.new(160, 10, 3, 4)
+			enemy_instance.stats = Stats.new(160, 10, 3, 2)
 			enemy_instance.sprite.texture = wolf_texture
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
 		Enemy.EnemyKind.BlackKnight:
-			enemy_instance.stats = Stats.new(240, 15, 6, 6)
+			enemy_instance.stats = Stats.new(240, 15, 6, 4)
 			enemy_instance.sprite.texture = black_knight_texture
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
