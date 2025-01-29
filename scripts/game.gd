@@ -58,6 +58,7 @@ func _ready() -> void:
 		player_instance.gold = GameState.player_gold
 		player_instance.stats = GameState.player_stats
 		player_instance.update_stats()
+		player_instance.update_weapon()
 	else:
 		GameState.started = true
 		GameState.player_stats = player_instance.stats

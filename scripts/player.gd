@@ -62,3 +62,10 @@ func update_stats():
 	$DEF.text = stats.def_string()
 	$AP.text = stats.ap_string()
 
+func update_weapon():
+	match GameState.next_level:
+		2: change_weapon_kind(WeaponKind.Stick)
+		3: change_weapon_kind(WeaponKind.Staff)
+		4: change_weapon_kind(WeaponKind.Spear)
+		5: change_weapon_kind(WeaponKind.Sword)
+		6: change_weapon_kind(WeaponKind.Revolver)
