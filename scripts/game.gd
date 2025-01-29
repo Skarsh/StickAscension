@@ -18,6 +18,10 @@ extends Node2D
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 
 var stick_attack_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
+var staff_attack_sound = preload("res://sounds/Weapons/StaffAttackSound.wav")
+var spear_attack_sound = preload("res://sounds/Weapons/SpearAttackSound.mp3")
+var sword_attack_sound = preload("res://sounds/Weapons/SwordAttackSound.mp3")
+var revolver_attack_sound = preload("res://sounds/Weapons/RevolverAttackSound.mp3")
 
 var slime_attack_sound = preload("res://sounds/Monsters/Slime/SlimeAttackSound.mp3")
 var wolf_attack_sound = preload("res://sounds/Monsters/Wolf/WolfAttackSound.mp3")
@@ -168,7 +172,19 @@ func _on_attack_pressed() -> void:
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
 		)
-		player_sound_player.stream = stick_attack_sound
+
+		match player_instance.kind:
+			Player.WeaponKind.Stick:
+				player_sound_player.stream = stick_attack_sound
+			Player.WeaponKind.Staff:
+				player_sound_player.stream = staff_attack_sound
+			Player.WeaponKind.Spear:
+				player_sound_player.stream = spear_attack_sound
+			Player.WeaponKind.Sword:
+				player_sound_player.stream = sword_attack_sound
+			Player.WeaponKind.Revolver:
+				player_sound_player.stream = revolver_attack_sound
+
 		player_sound_player.play()
 		player_turn = false
 
