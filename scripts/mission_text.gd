@@ -11,6 +11,79 @@ With your "stick-sight" (which I just made up), you spot something moving in the
 Oh no, it is coming right at you. Oh yes, it is time to fight.
 """
 
+var scene_1: String = """
+You did it. You stuck that thing right in the face.
+Should sticks feel remorse? You do not know; you have never been a stick before.
+There is no time for introspection. Another one is coming.
+"""
+
+var scene_2: String = """
+Something feels different. Are you... evolving?
+Maybe you are not just a stick anymore. Maybe you are... a staff?
+What is the difference? Is it just height? Status? Better posture?
+Does it matter?
+"""
+
+var scene_3: String = """
+You are not a stick. Not anymore. You are something more.
+You start to forget who you once were, and you remember the wise words of a famous forest predator.
+“The things that make me different are the things that make me, me.”
+Show the next one you, you.
+"""
+
+var scene4: String = """
+Your mind feels... expansive. Wait, do you even have a mind?
+Whatever it is, it is working. You are stronger.
+But will you get to the bottom of this mystery? Or just keep hitting things until they stop moving?
+Either way works for me.
+"""
+
+var scene5: String = """
+There is no stopping you now. You are the stick everyone warned their kids about.
+A stick with metal on it.
+The stick parents tell bedtime horror stories about.
+“You had better clean your room, or The Stick will find you!”
+Yes. You are the weapon.
+"""
+
+var scene6: String = """
+But… must you be this weapon of destruction? Could you not be something else?
+Like a really sharp pencil? Or an inspirational walking stick for an old wizard?
+No? Too late? Okay, cool. Back to smashing.
+"""
+
+var scene7: String = """
+Wait, what is that smell? It is… gunpowder?
+Oh, sweet splinters, are you a gun stick now?!
+Things just got spicy. And very, very unsafe.
+"""
+
+var scene8: String = """
+You are having fun now, are you not? Do not lie.
+Admit it. Violence suits you. You are thriving.
+Take a moment to smile. Oh wait, you do not have a face. Well, that is awkward.
+"""
+
+var scene9: String = """
+Did you anger some wizard or something? Is this why you are here?
+Were you human once? Or are you just some random enchanted stick?
+You start to wonder, is the mind of a stick stuck in a human body somewhere?
+Still a better story than Rob Schneider in The Hot Chick (2002). Yes, I said it.
+"""
+
+var scene10: String = """
+If you had hands, you would pinch yourself. But you do not.
+So how do you know if this is real?
+Is this a game? Are you the game?
+Who is playing you? Are they good at it? … Probably not.
+"""
+
+var scene11: String = """
+Does any of this matter? You are unstoppable now.
+Simple creatures are not even worth your time. You crave… more.
+You do not need me anymore. Are you finally questioning who I am? I think you know the answer to that one.
+"""
+
 @export var typing_speed: float = 0.07
 
 @onready var text_label: Label =  $VBoxContainer/Text
@@ -18,14 +91,14 @@ Oh no, it is coming right at you. Oh yes, it is time to fight.
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
 
 var current_text: String = ""
-var current_index: int = 0
+var current_text_index: int = 0
 var is_typing: bool = false
 
 var time_since_last_scribble = 0.0
 
 func start_typing_effect() -> void:
 	current_text = ""
-	current_index = 0
+	current_text_index = 0
 	is_typing = true
 	audio_player.play()
 	set_process(true)
@@ -47,14 +120,14 @@ func _process(delta: float) -> void:
 	time_since_last_scribble += delta
 
 	if is_typing && time_since_last_scribble > typing_speed:
-		if current_index < opening_monologue.length():
-			current_text += opening_monologue[current_index]
+		if current_text_index < opening_monologue.length():
+			current_text += opening_monologue[current_text_index]
 			text_label.text = current_text
-			current_index += 1
+			current_text_index += 1
 			time_since_last_scribble = 0
 		else:
 			current_text = ""
-			current_index = 0
+			current_text_index = 0
 
-	if current_index == opening_monologue.length() - 1:
+	if current_text_index == opening_monologue.length() - 1:
 		stop_typing_effect()

@@ -34,13 +34,13 @@ func generate_drop() -> int:
 	var gold_value = 0
 	match kind: 
 		EnemyKind.Slime: 
-			gold_value = randi_range(0, 10)
-		EnemyKind.Wolf: 
-			gold_value = randi_range(8, 20)
-		EnemyKind.BlackKnight: 
-			gold_value = randi_range(15, 30)
-		EnemyKind.Demon: 
-			gold_value = randi_range(30, 50)
-		EnemyKind.Eldritch: 
 			gold_value = randi_range(50, 100)
+		EnemyKind.Wolf: 
+			gold_value = randi_range(200, 300)
+		EnemyKind.BlackKnight: 
+			gold_value = randi_range(400, 600)
+		EnemyKind.Eldritch: 
+			gold_value = randi_range(1000, 1500)
+		EnemyKind.Demon: 
+			gold_value = randi_range(2300, 3200)
 	return gold_value

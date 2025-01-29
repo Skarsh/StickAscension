@@ -137,25 +137,24 @@ texture_hover = SubResource("AtlasTexture_q7mim")
 
 [node name="Label" type="Label" parent="CanvasLayer/InteractionButtons/Item"]
 layout_mode = 0
-offset_left = 50.0
+offset_left = 55.0
 offset_top = 25.0
-offset_right = 90.0
+offset_right = 95.0
 offset_bottom = 48.0
 text = "Item"
 
-[node name="Run" type="TextureButton" parent="CanvasLayer/InteractionButtons"]
+[node name="Escape" type="TextureButton" parent="CanvasLayer/InteractionButtons"]
 layout_mode = 2
-size_flags_horizontal = 3
 texture_normal = SubResource("AtlasTexture_hfq3f")
 texture_hover = SubResource("AtlasTexture_q7mim")
 
-[node name="Label" type="Label" parent="CanvasLayer/InteractionButtons/Run"]
+[node name="Label" type="Label" parent="CanvasLayer/InteractionButtons/Escape"]
 layout_mode = 0
-offset_left = 50.0
+offset_left = 18.0
 offset_top = 25.0
-offset_right = 90.0
+offset_right = 134.0
 offset_bottom = 48.0
-text = "Run"
+text = "Escape to shop"
 
 [node name="Gold" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 8
@@ -163,9 +162,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -928.0
+offset_left = -888.0
 offset_top = 381.0
-offset_right = -494.0
+offset_right = -454.0
 offset_bottom = 701.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -274,7 +273,7 @@ texture_normal = ExtResource("7_5n7xk")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")
-volume_db = -55.558
+volume_db = -22.462
 autoplay = true
 
 [node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
@@ -285,3 +284,4 @@ script = ExtResource("7_tflug")
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]
 [connection signal="mouse_entered" from="CanvasLayer/InteractionButtons/Attack" to="." method="_on_attack_mouse_entered"]
 [connection signal="pressed" from="CanvasLayer/InteractionButtons/Attack" to="." method="_on_attack_pressed"]
+[connection signal="pressed" from="CanvasLayer/InteractionButtons/Escape" to="." method="_on_escape_pressed"]

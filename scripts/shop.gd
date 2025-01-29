@@ -1,9 +1,12 @@
 extends Node
 
+@export var gold_spent_progressbar: ProgressBar
+
 @export var Item1: TextureButton
 @export var Item2: TextureButton
 @export var Item3: TextureButton
 @export var Item4: TextureButton
+
 
 enum ItemKind{Health, Atk, Def, Ap}
 
@@ -24,7 +27,7 @@ var selected_button: TextureButton = null
 var selected_style = StyleBoxFlat.new()
 
 func _ready() -> void:
-	update_gold_label()
+	update_ui()
 
 	items.append(Item.new(5, ItemKind.Health, 1))
 	items.append(Item.new(10, ItemKind.Atk, 1))
@@ -82,10 +85,10 @@ func _process(delta: float) -> void:
 func button_hover_animation(button: TextureButton):
 	button.pivot_offset = button.size / 2
 	if button == selected_button:
-		start_tween(button, "scale", Vector2.ONE * 2.0, 0.1)
+		start_tween(button, "scale", Vector2.ONE * 1.5, 0.1)
 	else:
 		if button.is_hovered():
-			start_tween(button, "scale", Vector2.ONE * 2.0, 0.1)
+			start_tween(button, "scale", Vector2.ONE * 1.5, 0.1)
 		else:
 			start_tween(button, "scale", Vector2.ONE, 0.1)
 
@@ -144,8 +147,11 @@ func _on_buy_button_pressed() -> void:
 			ItemKind.Ap:
 				GameState.player_stats.ap += item.value
 		GameState.player_gold -= item.cost
+		GameState.gold_spent += item.cost
 
-	update_gold_label()
+	update_ui()
 	
-func update_gold_label() -> void:
+func update_ui() -> void:
 	gold_label.text = str(GameState.player_gold)
+	gold_spent_progressbar.value = GameState.gold_spent / float(GameState.next_level) * 100
+

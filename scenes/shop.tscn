@@ -1,17 +1,21 @@
-[gd_scene load_steps=10 format=3 uid="uid://d16txpx0437sm"]
+[gd_scene load_steps=11 format=3 uid="uid://d16txpx0437sm"]
 
 [ext_resource type="Script" path="res://scripts/shop.gd" id="1_5shy3"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="1_ndm4j"]
 [ext_resource type="Texture2D" uid="uid://dg36ud8yxcdii" path="res://sprites/Coin_version_3_5xScaled.png" id="1_vpxoa"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="3_2gwwh"]
-[ext_resource type="Texture2D" uid="uid://ck1kbfsg8l3f" path="res://sprites/health_temp.png" id="5_kqs1a"]
+[ext_resource type="Texture2D" uid="uid://pwibxovgn04n" path="res://sprites/health_icon.png" id="5_gyo4l"]
+[ext_resource type="Texture2D" uid="uid://bnbdy7jpmdi8d" path="res://sprites/atk_icon.png" id="6_d2ihl"]
 [ext_resource type="AudioStream" uid="uid://ckavuu7ijlm48" path="res://sounds/ES_Handwriting, Pen On Paper, Writing 02 - Epidemic Sound.mp3" id="6_o6ln6"]
-[ext_resource type="Texture2D" uid="uid://ci4ljxerfxf6m" path="res://sprites/atk_temp.png" id="6_wj5ci"]
-[ext_resource type="Texture2D" uid="uid://cky8u5qikv64p" path="res://sprites/def_temp.png" id="7_bdqov"]
-[ext_resource type="Texture2D" uid="uid://d2kiyc46nesab" path="res://sprites/ap_temp.png" id="8_osil5"]
+[ext_resource type="Texture2D" uid="uid://coohi3fceu2kr" path="res://sprites/def_icon.png" id="7_ceoxa"]
+[ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="9_aoeqg"]
 
-[node name="Shop" type="Node2D" node_paths=PackedStringArray("Item1", "Item2", "Item3", "Item4")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3u75"]
+bg_color = Color(0.465602, 0.673338, 0.224338, 1)
+
+[node name="Shop" type="Node2D" node_paths=PackedStringArray("gold_spent_progressbar", "Item1", "Item2", "Item3", "Item4")]
 script = ExtResource("1_5shy3")
+gold_spent_progressbar = NodePath("CanvasLayer/ProgressBar")
 Item1 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1")
 Item2 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2")
 Item3 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3")
@@ -19,15 +23,30 @@ Item4 = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -534.0
+offset_top = -483.0
+offset_right = 466.0
+offset_bottom = -456.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_y3u75")
+show_percentage = false
+
 [node name="Gold" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -928.0
+offset_left = -878.0
 offset_top = 381.0
-offset_right = -494.0
+offset_right = -444.0
 offset_bottom = 701.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -140,13 +159,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -795.5
-offset_top = -374.0
-offset_right = 795.5
-offset_bottom = 374.0
+offset_left = -817.0
+offset_top = -450.0
+offset_right = 774.0
+offset_bottom = 298.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.965795, 1.00789)
+scale = Vector2(1, 1.043)
 theme = ExtResource("1_ndm4j")
 theme_type_variation = &"BigPanelContainer"
 metadata/_edit_use_anchors_ = true
@@ -186,46 +205,52 @@ size_flags_stretch_ratio = 2.0
 [node name="Space1" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.5
 
 [node name="Item1" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_vertical = 0
-texture_normal = ExtResource("5_kqs1a")
+texture_normal = ExtResource("5_gyo4l")
 
 [node name="Space2" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="Item2" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_vertical = 0
-texture_normal = ExtResource("6_wj5ci")
+texture_normal = ExtResource("6_d2ihl")
 
 [node name="Space3" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="Item3" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_vertical = 0
-texture_normal = ExtResource("7_bdqov")
+texture_normal = ExtResource("7_ceoxa")
 
 [node name="Space4" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="Item4" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_vertical = 0
-texture_normal = ExtResource("8_osil5")
+texture_normal = ExtResource("7_ceoxa")
 
 [node name="Space5" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="Space3" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Spacer2" type="Control" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -254,6 +279,11 @@ size_flags_horizontal = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/MissionTextPanelContainer"]
 stream = ExtResource("6_o6ln6")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_aoeqg")
+volume_db = -20.3
+autoplay = true
 
 [connection signal="mouse_entered" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1" to="." method="_on_item_1_mouse_entered"]
 [connection signal="mouse_exited" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item1" to="." method="_on_item_1_mouse_exited"]

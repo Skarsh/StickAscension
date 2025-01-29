@@ -13,8 +13,15 @@ extends Node2D
 @export var spawner: Spawner
 
 var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
-var stick_hit_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
-var slime_hit_sound = preload("res://sounds/ES_Swipe, Body Hit, Slash - Epidemic Sound.mp3")
+
+var stick_attack_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
+
+var slime_attack_sound = preload("res://sounds/Monsters/Slime/SlimeAttackSound.mp3")
+var wolf_attack_sound = preload("res://sounds/Monsters/Wolf/WolfAttackSound.mp3")
+var black_knight_attack_sound = preload("res://sounds/Monsters/BlackKnight/BlackKnightAttackSound.mp3")
+var eldritch_attack_sound = preload("res://sounds/Monsters/EldritchBeast/EldritchBeastAttackSound.mp3")
+var demon_attack_sound = preload("res://sounds/Monsters/Demon/DemonAttackSound.mp3")
+
 var button_entered_sound = preload("res://sounds/MenuHoverBop.wav")
 
 var player_scene = preload("res://scenes/player.tscn")
@@ -28,6 +35,9 @@ var game_active = false
 var player_turn = true
 var is_animating = false
 
+const PLAYER_SCALE = 2.5
+const PLAYER_SPRITE_SCALE = 10
+
 func _ready() -> void:
 
 	add_child(enemy_attack_timer)
@@ -36,8 +46,8 @@ func _ready() -> void:
 
 	player_instance = player_scene.instantiate()
 	add_child(player_instance)
-	player_instance.scale *= 2
-	player_instance.sprite.scale /= 10
+	player_instance.scale *= PLAYER_SCALE
+	player_instance.sprite.scale /= PLAYER_SPRITE_SCALE
 	player_instance.position = Vector2(-500, 0)
 
 	# TODO(Thomas): Set more of the previous player state, e.g weaponkind, stats etc
@@ -48,9 +58,11 @@ func _ready() -> void:
 	else:
 		GameState.started = true
 		GameState.player_stats = player_instance.stats
+		GameState.next_level = GameState.LEVEL_2_GOLD
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
+
 
 	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
 
@@ -107,15 +119,25 @@ func _on_enemy_attack_timer_timeout() -> void:
 			# TODO(Thomas): What to do when the player dies?
 			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
 		)
-		sound_player.stream = stick_hit_sound
+
+		match enemy_instance.kind:
+			Enemy.EnemyKind.Slime:
+				sound_player.stream = slime_attack_sound
+			Enemy.EnemyKind.Wolf:
+				sound_player.stream = wolf_attack_sound
+			Enemy.EnemyKind.BlackKnight:
+				sound_player.stream = black_knight_attack_sound
+			Enemy.EnemyKind.Eldritch:
+				sound_player.stream = eldritch_attack_sound
+			Enemy.EnemyKind.Demon:
+				sound_player.stream = demon_attack_sound
+
 		sound_player.play()
 		player_turn = true
 
 func _process(delta: float) -> void:	
-	if Input.is_action_just_pressed("ui_accept"):  # Checks for Enter key
-		# TODO(Thomas): Set more of the game state here
-		GameState.player_gold = player_instance.gold
-		get_tree().change_scene_to_file("res://scenes/shop.tscn")
+	if Input.is_action_just_pressed("ui_accept"):
+		mission_text.stop_typing_effect()
 		
 func _on_ok_button_pressed() -> void:
 	start_battle_scene()
@@ -132,7 +154,6 @@ func _on_attack_pressed() -> void:
 				player_instance.gold += gold_amount
 				gold_label.text = str(player_instance.gold)
 
-
 				# Despawn
 				enemy_instance.hide()
 				spawner.despawn(enemy_instance)
@@ -141,16 +162,13 @@ func _on_attack_pressed() -> void:
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
 		)
-		sound_player.stream = slime_hit_sound
+		sound_player.stream = stick_attack_sound
 		sound_player.play()
 		player_turn = false
 
 		# It's not time for the enemy to attack us
 		start_enemy_attack_timer()
 
-
-func _on_attack_mouse_entered() -> void:
-	pass
 
 func start_battle_scene() -> void:
 	mission_text.hide()
@@ -161,3 +179,7 @@ func start_battle_scene() -> void:
 	audio_player.play()
 	game_active = true
 	interaction_buttons.show()
+
+func _on_escape_pressed() -> void:
+	GameState.player_gold = player_instance.gold
+	get_tree().change_scene_to_file("res://scenes/shop.tscn")
