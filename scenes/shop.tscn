@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://d16txpx0437sm"]
+[gd_scene load_steps=11 format=3 uid="uid://d16txpx0437sm"]
 
 [ext_resource type="Script" path="res://scripts/shop.gd" id="1_5shy3"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="1_ndm4j"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bnbdy7jpmdi8d" path="res://sprites/atk_icon.png" id="6_d2ihl"]
 [ext_resource type="Texture2D" uid="uid://coohi3fceu2kr" path="res://sprites/def_icon.png" id="7_ceoxa"]
 [ext_resource type="AudioStream" uid="uid://clkjs3x14agbj" path="res://music/ShopMusic.mp3" id="8_3nwsi"]
+[ext_resource type="Texture2D" uid="uid://cf77gqs8iffu6" path="res://sprites/Lightning.png" id="8_3p5gi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3u75"]
 bg_color = Color(0.465602, 0.673338, 0.224338, 1)
@@ -298,7 +299,7 @@ size_flags_stretch_ratio = 2.0
 [node name="Item4" type="TextureButton" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items"]
 layout_mode = 2
 size_flags_vertical = 0
-texture_normal = ExtResource("7_ceoxa")
+texture_normal = ExtResource("8_3p5gi")
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4"]
 layout_mode = 1
