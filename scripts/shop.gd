@@ -7,6 +7,11 @@ extends Node
 @export var Item3: TextureButton
 @export var Item4: TextureButton
 
+@export var HealthLabel: Label
+@export var AtkLabel: Label
+@export var DefLabel: Label
+@export var ApLabel: Label
+
 
 enum ItemKind{Health, Atk, Def, Ap}
 
@@ -139,7 +144,7 @@ func _on_buy_button_pressed() -> void:
 	if item != null and GameState.player_gold >= item.cost:
 		match item.kind:
 			ItemKind.Health:
-				GameState.player_stats.health += item.value
+				GameState.player_stats.max_health += item.value
 			ItemKind.Atk:
 				GameState.player_stats.atk += item.value
 			ItemKind.Def:
@@ -154,4 +159,9 @@ func _on_buy_button_pressed() -> void:
 func update_ui() -> void:
 	gold_label.text = str(GameState.player_gold)
 	gold_spent_progressbar.value = GameState.gold_spent / float(GameState.next_level) * 100
+
+	HealthLabel.text = "Health: " + str(GameState.player_stats.max_health)
+	AtkLabel.text = "Atk: " + str(GameState.player_stats.atk)
+	DefLabel.text = "Def: " + str(GameState.player_stats.def)
+	ApLabel.text = "Ap: " + str(GameState.player_stats.ap)
 

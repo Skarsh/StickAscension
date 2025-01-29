@@ -273,10 +273,12 @@ texture_normal = ExtResource("7_5n7xk")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")
-volume_db = -22.462
+volume_db = -54.738
 autoplay = true
 
-[node name="SoundPlayer" type="AudioStreamPlayer" parent="."]
+[node name="PlayerSoundPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="EnemySoundPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="Spawner" type="Node" parent="."]
 script = ExtResource("7_tflug")

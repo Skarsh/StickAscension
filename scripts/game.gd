@@ -6,7 +6,8 @@ extends Node2D
 @onready var gold_label: Label = $CanvasLayer/Gold/Label
 
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
-@onready var sound_player: AudioStreamPlayer = $SoundPlayer
+@onready var enemy_sound_player: AudioStreamPlayer = $EnemySoundPlayer
+@onready var player_sound_player: AudioStreamPlayer = $PlayerSoundPlayer
 
 @onready var enemy_attack_timer: Timer = Timer.new()
 
@@ -64,7 +65,7 @@ func _ready() -> void:
 	gold_label.text = str(player_instance.gold)
 
 
-	enemy_instance = spawner.spawn(self, Enemy.EnemyKind.Wolf)
+	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
@@ -122,17 +123,17 @@ func _on_enemy_attack_timer_timeout() -> void:
 
 		match enemy_instance.kind:
 			Enemy.EnemyKind.Slime:
-				sound_player.stream = slime_attack_sound
+				enemy_sound_player.stream = slime_attack_sound
 			Enemy.EnemyKind.Wolf:
-				sound_player.stream = wolf_attack_sound
+				enemy_sound_player.stream = wolf_attack_sound
 			Enemy.EnemyKind.BlackKnight:
-				sound_player.stream = black_knight_attack_sound
+				enemy_sound_player.stream = black_knight_attack_sound
 			Enemy.EnemyKind.Eldritch:
-				sound_player.stream = eldritch_attack_sound
+				enemy_sound_player.stream = eldritch_attack_sound
 			Enemy.EnemyKind.Demon:
-				sound_player.stream = demon_attack_sound
+				enemy_sound_player.stream = demon_attack_sound
 
-		sound_player.play()
+		enemy_sound_player.play()
 		player_turn = true
 
 func _process(delta: float) -> void:	
@@ -162,8 +163,8 @@ func _on_attack_pressed() -> void:
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
 		)
-		sound_player.stream = stick_attack_sound
-		sound_player.play()
+		player_sound_player.stream = stick_attack_sound
+		player_sound_player.play()
 		player_turn = false
 
 		# It's not time for the enemy to attack us
