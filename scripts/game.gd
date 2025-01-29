@@ -188,3 +188,7 @@ func start_battle_scene() -> void:
 func _on_escape_pressed() -> void:
 	GameState.player_gold = player_instance.gold
 	get_tree().change_scene_to_file("res://scenes/shop.tscn")
+
+func _on_mission_text_panel_container_start_battle_scene_signal() -> void:
+	await get_tree().process_frame
+	start_battle_scene()

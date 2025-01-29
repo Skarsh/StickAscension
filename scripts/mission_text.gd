@@ -97,6 +97,8 @@ var is_typing: bool = false
 
 var time_since_last_scribble = 0.0
 
+signal start_battle_scene_signal
+
 func start_typing_effect() -> void:
 	current_text = ""
 	current_text_index = 0
@@ -112,14 +114,22 @@ func stop_typing_effect() -> void:
 	set_process(false)
 
 func _ready() -> void:
-	if not GameState.started:
-		next_scene_text = opening_monologue
+	var scene_text = GameState.get_next_scene_text()
+	
+	# If we're just starting or if there's no new scene text
+	if not GameState.started or scene_text == "":
+		# Only show opening monologue if we haven't shown it before
+		if not GameState.shown_scenes.has(0):
+			GameState.shown_scenes.append(0)
+			next_scene_text = opening_monologue
+			start_typing_effect()
+		else:
+			hide()
+			emit_signal("start_battle_scene_signal")
+			return
 	else:
-		next_scene_text = GameState.get_next_scene_text()
-		if next_scene_text != "":
-			current_text = next_scene_text
-
-	start_typing_effect()
+		next_scene_text = scene_text
+		start_typing_effect()
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):

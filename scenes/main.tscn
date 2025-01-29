@@ -274,7 +274,7 @@ texture_normal = ExtResource("7_5n7xk")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")
-volume_db = -54.738
+volume_db = -51.957
 autoplay = true
 
 [node name="PlayerSoundPlayer" type="AudioStreamPlayer" parent="."]
@@ -284,6 +284,7 @@ autoplay = true
 [node name="Spawner" type="Node" parent="."]
 script = ExtResource("7_tflug")
 
+[connection signal="start_battle_scene_signal" from="CanvasLayer/MissionTextPanelContainer" to="." method="_on_mission_text_panel_container_start_battle_scene_signal"]
 [connection signal="pressed" from="CanvasLayer/MissionTextPanelContainer/VBoxContainer/HBoxContainer/OkButton" to="." method="_on_ok_button_pressed"]
 [connection signal="mouse_entered" from="CanvasLayer/InteractionButtons/Attack" to="." method="_on_attack_mouse_entered"]
 [connection signal="pressed" from="CanvasLayer/InteractionButtons/Attack" to="." method="_on_attack_pressed"]
