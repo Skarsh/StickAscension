@@ -119,5 +119,7 @@ func update_weapon():
 		3: change_weapon_kind(WeaponKind.Staff)
 		4: change_weapon_kind(WeaponKind.Spear)
 		5: change_weapon_kind(WeaponKind.Sword)
-		6: change_weapon_kind(WeaponKind.Revolver)
+		6: pass
+		7: pass
+		8: change_weapon_kind(WeaponKind.Revolver)
 		_: change_weapon_kind(WeaponKind.Revolver)

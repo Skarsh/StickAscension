@@ -464,6 +464,13 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 		GameState.player_gold += gold_amount
 		gold_label.text = str(GameState.player_gold)
 		
+		# Check if this is our first slime defeat
+		if enemy_instance.kind == Enemy.EnemyKind.Slime and not GameState.first_slime_defeated:
+			GameState.first_slime_defeated = true
+			# Reload the main scene to show the mission text
+			get_tree().change_scene_to_file("res://scenes/main.tscn")
+			return
+		
 		# Create a tween for fading out the current enemy
 		var fade_out_tween = create_tween()
 		fade_out_tween.tween_property(enemy_instance, "modulate:a", 0.0, 0.5)
@@ -481,11 +488,10 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 		var fade_in_tween = create_tween()
 		fade_in_tween.tween_property(enemy_instance, "modulate:a", 1.0, 0.5)
 		await fade_in_tween.finished
-
 	
 	player_instance.update_stats()
 
-	 # Check if player is out of AP and automatically end turn if so
+	# Check if player is out of AP and automatically end turn if so
 	if player_instance.stats.ap <= 0:
 		transition_to_turn_state(TurnState.ENEMY_TURN)
 	else:

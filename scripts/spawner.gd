@@ -12,7 +12,6 @@ var black_knight_texture = preload("res://sprites/EnemyCardBlackKnigh_Version_1_
 var demon_texutre = preload("res://sprites/EnemyCardDemon_Version_1_Merged_10xScaled.png")
 var eldritch_texture = preload("res://sprites/EnemyCardEldritchBeast_version_1_Merged_10xScaled.png")
 
-
 const ENEMY_SCALE = 2.5
 const ENEMY_SPRITE_SCALE = 10
 
@@ -47,21 +46,28 @@ func random_enemy_kind() -> Enemy.EnemyKind:
 				Enemy.EnemyKind.Wolf,
 				Enemy.EnemyKind.BlackKnight,
 				Enemy.EnemyKind.BlackKnight,  # Weight knights higher
-				Enemy.EnemyKind.Demon
 			]
 		5: # Introduce Eldritch
 			available_enemies = [
 				Enemy.EnemyKind.BlackKnight,
-				Enemy.EnemyKind.Demon,
-				Enemy.EnemyKind.Demon,        # Weight demons higher
+				Enemy.EnemyKind.Eldritch,
 				Enemy.EnemyKind.Eldritch
 			]
-		6, 7, 8: # Late game mix
+		6: 
 			available_enemies = [
-				Enemy.EnemyKind.Demon,
 				Enemy.EnemyKind.Demon,
 				Enemy.EnemyKind.Eldritch,
 				Enemy.EnemyKind.Eldritch
+			]
+		7: # Late game mix
+			available_enemies = [
+				Enemy.EnemyKind.Demon,
+				Enemy.EnemyKind.Demon,
+				Enemy.EnemyKind.Eldritch
+			]
+		8: 
+			available_enemies = [
+				Enemy.EnemyKind.Demon,
 			]
 		_: # Default/fallback case
 			available_enemies = [Enemy.EnemyKind.Slime]
@@ -75,7 +81,6 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 	enemy_instance.setup(kind)
 	parent.add_child(enemy_instance)
 
-	# TODO(Thomas): Should make the slime scaled the same as the others
 	match kind:
 		Enemy.EnemyKind.Slime:
 			enemy_instance.stats = Stats.new(20, 5, 1, 1)
@@ -92,14 +97,14 @@ func spawn(parent: Node2D, kind: Enemy.EnemyKind) -> Node2D:
 			enemy_instance.sprite.texture = black_knight_texture
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
-		Enemy.EnemyKind.Demon:
-			enemy_instance.stats = Stats.new(320, 22, 8, 10) 
-			enemy_instance.sprite.texture = demon_texutre
+		Enemy.EnemyKind.Eldritch:
+			enemy_instance.stats = Stats.new(320, 22, 8, 12)
+			enemy_instance.sprite.texture = eldritch_texture
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
-		Enemy.EnemyKind.Eldritch:
-			enemy_instance.stats = Stats.new(450, 35, 15, 20)
-			enemy_instance.sprite.texture = eldritch_texture
+		Enemy.EnemyKind.Demon:
+			enemy_instance.stats = Stats.new(450, 22, 14, 23) 
+			enemy_instance.sprite.texture = demon_texutre
 			enemy_instance.scale *= ENEMY_SCALE
 			enemy_instance.sprite.scale /= ENEMY_SPRITE_SCALE
 

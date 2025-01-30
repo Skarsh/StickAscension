@@ -34,7 +34,7 @@ func generate_drop() -> int:
 	var gold_value = 0
 	match kind: 
 		EnemyKind.Slime: 
-			gold_value = randi_range(50, 100000000)
+			gold_value = randi_range(50, 100)
 		EnemyKind.Wolf: 
 			gold_value = randi_range(200, 300)
 		EnemyKind.BlackKnight: 
