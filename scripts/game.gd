@@ -416,13 +416,27 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 		GameState.player_gold += gold_amount
 		gold_label.text = str(GameState.player_gold)
 		
+		# Create a tween for fading out the current enemy
+		var fade_out_tween = create_tween()
+		fade_out_tween.tween_property(enemy_instance, "modulate:a", 0.0, 0.5)
+		await fade_out_tween.finished
+		
 		enemy_instance.hide()
 		spawner.despawn(enemy_instance)
+		
+		# Spawn new enemy but keep it hidden initially
 		enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
+		enemy_instance.modulate.a = 0.0  # Set initial alpha to 0
 		enemy_instance.show()
+		
+		# Create a tween for fading in the new enemy
+		var fade_in_tween = create_tween()
+		fade_in_tween.tween_property(enemy_instance, "modulate:a", 1.0, 0.5)
+		await fade_in_tween.finished
 	
 	player_instance.update_stats()
 	current_turn_state = TurnState.PLAYER_TURN  # Return to player turn for more actions if AP remains
+
 
 
 func start_battle_scene() -> void:
