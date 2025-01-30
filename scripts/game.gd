@@ -80,16 +80,91 @@ func _ready() -> void:
 
 	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 
+func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
+	if is_animating:
+		return
+	
+	is_animating = true
+	attack_hit = false
+	
+	var start_pos = attacker.position
+	var target_pos = target.position
+	var original_rotation = attacker.rotation
+	var slam_rotation = PI/2 if attacker == player_instance else -PI/2  # Adjusted rotation based on attacker
+	
+	# Calculate arc control points
+	var peak_height = 800
+	var arc_control = Vector2(
+		(start_pos.x + target_pos.x) / 2,
+		min(start_pos.y, target_pos.y) - peak_height
+	)
+	
+	var hover_pos = Vector2(target_pos.x, arc_control.y)
+	
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_QUAD)
+	
+	var rise_duration = 0.6
+	var hover_duration = 0.2
+	var slam_duration = 0.15
+	var return_duration = 0.3
+	
+	# Start camera zoom out as we rise
+	camera.zoom_out(0.5, rise_duration * 0.5)
+	
+	# Rise up in arc
+	tween.tween_method(
+		func(t: float):
+			var q0 = start_pos.lerp(arc_control, t)
+			var q1 = arc_control.lerp(hover_pos, t)
+			attacker.position = q0.lerp(q1, t)
+			attacker.rotation = lerp_angle(original_rotation, slam_rotation, t), 0.0, 1.0, rise_duration
+	)
+	
+	tween.tween_interval(hover_duration)
+	
+	tween.tween_callback(func():
+		camera.zoom_reset(slam_duration)
+	)
+	
+	# Slam down
+	tween.tween_method(
+		func(t: float):
+			attacker.position = hover_pos.lerp(target_pos, t), 0.0, 1.0, slam_duration
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	
+	# Trigger hit effect at impact
+	tween.tween_callback(func():
+		attack_hit = true
+		_on_attack_hit(attacker, target, true)
+	)
+	
+	# Return to start
+	tween.tween_method(
+		func(t: float):
+			attacker.position = target_pos.lerp(start_pos, t)
+			attacker.rotation = lerp_angle(slam_rotation, original_rotation, t), 0.0, 1.0, return_duration
+	)
+	
+	tween.tween_callback(func():
+		attacker.position = start_pos
+		attacker.rotation = original_rotation
+		is_animating = false
+		attack_hit = false
+		on_complete.call()
+	)
 
-func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
+# Modify the original attack animation to be a separate function
+func perform_swipe_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
 	if is_animating:
 		return
 	
 	is_animating = true
 	var start_pos = attacker.position
 	var target_pos = target.position
+	var original_rotation = attacker.rotation
+	var attack_rotation = 0.5 if attacker == player_instance else -0.5
 
-	# Calculate control point for the quadratic curve
 	var control_point = Vector2(
 		(start_pos.x + target_pos.x) / 2,
 		min(start_pos.y, target_pos.y) - 200
@@ -100,25 +175,25 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 
 	var attack_duration = 0.3
 	var return_duration = 0.2
-
-	# Point in the animation where we consider the hit to occur
-	var hit_threshold = 0.9  
-
-	# Forward attack animation with hit detection
-	tween.tween_method(
+	var rotation_duration = 0.15
+	var hit_threshold = 0.9
+	
+	tween.tween_property(attacker, "rotation", attack_rotation, rotation_duration)
+	
+	tween.parallel().tween_method(
 		func(t: float):
 			var q0 = start_pos.lerp(control_point, t)
 			var q1 = control_point.lerp(target_pos, t)
 			attacker.position = q0.lerp(q1, t)
 			
-			# Detect hit point
 			if t >= hit_threshold and not attack_hit:
 				attack_hit = true
 				_on_attack_hit(attacker, target), 0.0, 1.0, attack_duration
 	)
 
-	# Return attack animation
-	tween.tween_method(
+	tween.tween_property(attacker, "rotation", original_rotation, rotation_duration)
+	
+	tween.parallel().tween_method(
 		func(t: float):
 			var q0 = target_pos.lerp(control_point, t)
 			var q1 = control_point.lerp(start_pos, t)
@@ -127,9 +202,19 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 
 	tween.tween_callback(func():
 		is_animating = false
-		attack_hit = false  # Reset hit state
+		attack_hit = false
+		attacker.position = start_pos
+		attacker.rotation = original_rotation
 		on_complete.call()
 	)
+
+func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
+	# TODO(Thomas): This shouldn't be random when we implement the Ap stuff.
+	# Randomly choose between swipe and slam attacks
+	if randf() > 0.5:
+		perform_swipe_attack_animation(attacker, target, on_complete)
+	else:
+		perform_slam_attack_animation(attacker, target, on_complete)
 
 func start_enemy_attack_timer() -> void:
 	var delay = 1.0
@@ -160,7 +245,6 @@ func _on_attack_pressed() -> void:
 		perform_attack_animation(player_instance, enemy_instance, func():
 			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
 			if not alive:
-
 				# Drops
 				var gold_amount = enemy_instance.generate_drop()
 				GameState.player_gold += gold_amount
@@ -173,12 +257,10 @@ func _on_attack_pressed() -> void:
 				#Spawn
 				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 				enemy_instance.show()
+				
+			player_turn = false
+			start_enemy_attack_timer()
 		)
-
-		player_turn = false
-
-		# It's not time for the enemy to attack us
-		start_enemy_attack_timer()
 
 
 func start_battle_scene() -> void:
@@ -198,7 +280,7 @@ func _on_mission_text_panel_container_start_battle_scene_signal() -> void:
 	await get_tree().process_frame
 	start_battle_scene()
 
-func _on_attack_hit(attacker: Node2D, target: Node2D) -> void:
+func _on_attack_hit(attacker: Node2D, target: Node2D, is_slam: bool = false) -> void:
 	# Play hit sound effects
 	if attacker == player_instance:
 		match player_instance.kind:
@@ -227,5 +309,5 @@ func _on_attack_hit(attacker: Node2D, target: Node2D) -> void:
 				enemy_sound_player.stream = demon_attack_sound
 		enemy_sound_player.play()
 
-	# Trigger camera shake
-	camera.start_shake()
+	# Trigger appropriate camera shake
+	camera.start_shake(is_slam)
