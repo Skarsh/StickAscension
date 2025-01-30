@@ -49,6 +49,24 @@ const PLAYER_SPRITE_SCALE = 10
 
 const DEATH_PENALTY = 0.8
 
+enum AttackKind {Strike, Slam, Orbit}
+
+class AttackInfo:
+	var ap_cost: int
+	var damage_multiplier: float
+	var name: String
+
+	func _init(cost: int, multiplier: float, attack_name: String):
+		ap_cost = cost
+		damage_multiplier = multiplier
+		name = attack_name
+
+var attack_kinds = {
+	AttackKind.Strike: AttackInfo.new(1, 1.0, "Strike"),
+	AttackKind.Slam: AttackInfo.new(1, 2.0, "Slam"),
+	AttackKind.Orbit: AttackInfo.new(1, 1.5, "Orbit")
+}
+
 func _ready() -> void:
 
 	add_child(enemy_attack_timer)
@@ -321,6 +339,34 @@ func _process(delta: float) -> void:
 func _on_ok_button_pressed() -> void:
 	start_battle_scene()
 
+# Modified attack function to handle attack types
+func perform_attack(attack_kind: AttackKind) -> void:
+	if not game_active or not player_turn or is_animating or not player_instance.alive or not enemy_instance.alive:
+		return
+		
+	var attack = attack_kinds[attack_kind]
+	
+	# Check if player has enough AP
+	#if player_instance.stats.current_ap < attack.ap_cost:
+	if player_instance.stats.ap < attack.ap_cost:
+		# TODO: Show "Not enough AP" message to player
+		return
+		
+	# Deduct AP cost
+	#player_instance.stats.current_ap -= attack.ap_cost
+	
+	# Choose the appropriate animation
+	match attack_kind:
+		AttackKind.Strike:
+			perform_swipe_attack_animation(player_instance, enemy_instance, func():
+				_handle_attack_complete(attack.damage_multiplier))
+		AttackKind.Slam:
+			perform_slam_attack_animation(player_instance, enemy_instance, func():
+				_handle_attack_complete(attack.damage_multiplier))
+		AttackKind.Orbit:
+			perform_orbit_attack_animation(player_instance, enemy_instance, func():
+				_handle_attack_complete(attack.damage_multiplier))
+
 	
 func _on_attack_pressed() -> void:
 	if game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
@@ -344,6 +390,29 @@ func _on_attack_pressed() -> void:
 			start_enemy_attack_timer()
 		)
 
+
+func _handle_attack_complete(damage_multiplier: float) -> void:
+	var damage = enemy_instance.stats.calculate_damage(player_instance.stats)
+	damage = int(damage * damage_multiplier)
+	
+	var alive = enemy_instance.take_damage(damage)
+	if not alive:
+		# Drops
+		var gold_amount = enemy_instance.generate_drop()
+		GameState.player_gold += gold_amount
+		gold_label.text = str(GameState.player_gold)
+
+		# Despawn
+		enemy_instance.hide()
+		spawner.despawn(enemy_instance)
+
+		#Spawn
+		enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
+		enemy_instance.show()
+	
+	# Move turn management to after the animation completes
+	player_turn = false
+	start_enemy_attack_timer()
 
 func start_battle_scene() -> void:
 	mission_text.hide()
@@ -393,3 +462,12 @@ func _on_attack_hit(attacker: Node2D, target: Node2D, is_slam: bool = false) -> 
 
 	# Trigger appropriate camera shake
 	camera.start_shake(is_slam)
+
+func _on_strike_pressed() -> void:
+	perform_attack(AttackKind.Strike)
+
+func _on_slam_pressed() -> void:
+	perform_attack(AttackKind.Slam)
+
+func _on_orbit_pressed() -> void:
+	perform_attack(AttackKind.Orbit)
