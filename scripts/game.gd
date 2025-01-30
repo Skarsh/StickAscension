@@ -433,9 +433,15 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 		var fade_in_tween = create_tween()
 		fade_in_tween.tween_property(enemy_instance, "modulate:a", 1.0, 0.5)
 		await fade_in_tween.finished
+
 	
 	player_instance.update_stats()
-	current_turn_state = TurnState.PLAYER_TURN  # Return to player turn for more actions if AP remains
+
+	 # Check if player is out of AP and automatically end turn if so
+	if player_instance.stats.ap <= 0:
+		transition_to_turn_state(TurnState.ENEMY_TURN)
+	else:
+		current_turn_state = TurnState.PLAYER_TURN  # Return to player turn for more actions if AP remains
 
 
 
