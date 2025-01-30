@@ -474,4 +474,8 @@ func _on_slam_pressed() -> void:
 	perform_attack(AttackKind.Slam)
 
 func _on_orbit_pressed() -> void:
-	perform_attack(AttackKind.Slam)
+	perform_attack(AttackKind.Orbit)
+
+
+func _on_end_turn_pressed() -> void:
+	pass # Replace with function body.

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_w7hsy"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="2_7d7ee"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_cc7hk"]
-[ext_resource type="Texture2D" uid="uid://bldb8oaj8p8a5" path="res://images/Gamebackground_version_3.png" id="3_3ig0i"]
+[ext_resource type="Texture2D" uid="uid://bp41323lad7f5" path="res://images/Gamebackground_version_5.png" id="3_dxm8i"]
 [ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="6_ufe5y"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="7_5n7xk"]
 [ext_resource type="Texture2D" uid="uid://c0mwss4pvak8o" path="res://ui/ButtonBasicSmall.png" id="7_ica6u"]
@@ -37,7 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_3ig0i")
+texture = ExtResource("3_dxm8i")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -115,9 +115,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -294.0
+offset_left = -315.0
 offset_top = 431.0
-offset_right = 295.0
+offset_right = 532.0
 offset_bottom = 506.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -214,6 +214,36 @@ text = "Orbit   10"
 layout_mode = 2
 texture = ExtResource("8_lm84p")
 expand_mode = 2
+
+[node name="Control" type="Control" parent="CanvasLayer/InteractionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EndTurn" type="TextureButton" parent="CanvasLayer/InteractionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture_normal = SubResource("AtlasTexture_hfq3f")
+texture_hover = SubResource("AtlasTexture_q7mim")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InteractionButtons/EndTurn"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 76.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/InteractionButtons/EndTurn/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/InteractionButtons/EndTurn/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.80256, 0.1056, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "END TURN"
 
 [node name="Gold" type="HBoxContainer" parent="CanvasLayer"]
 anchors_preset = 8
@@ -373,4 +403,6 @@ script = ExtResource("7_tflug")
 [connection signal="pressed" from="CanvasLayer/InteractionButtons/Slam" to="." method="_on_slam_pressed"]
 [connection signal="mouse_entered" from="CanvasLayer/InteractionButtons/Orbit" to="." method="_on_attack_mouse_entered"]
 [connection signal="pressed" from="CanvasLayer/InteractionButtons/Orbit" to="." method="_on_orbit_pressed"]
+[connection signal="mouse_entered" from="CanvasLayer/InteractionButtons/EndTurn" to="." method="_on_attack_mouse_entered"]
+[connection signal="pressed" from="CanvasLayer/InteractionButtons/EndTurn" to="." method="_on_end_turn_pressed"]
 [connection signal="pressed" from="CanvasLayer/EscapeToShop" to="." method="_on_escape_pressed"]
