@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_w7hsy"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="2_7d7ee"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_cc7hk"]
-[ext_resource type="Texture2D" uid="uid://bp41323lad7f5" path="res://images/Gamebackground_version_5.png" id="3_dxm8i"]
+[ext_resource type="Texture2D" uid="uid://cec3xpd87472m" path="res://images/Gamebackground_version_6.png" id="3_4htrk"]
 [ext_resource type="Texture2D" uid="uid://bdibo25utfsfg" path="res://images/Boarder_version_1.png" id="4_fthrg"]
 [ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="6_ufe5y"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="7_5n7xk"]
@@ -38,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_dxm8i")
+texture = ExtResource("3_4htrk")
 
 [node name="Border" type="TextureRect" parent="Background"]
 anchors_preset = 15

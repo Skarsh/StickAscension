@@ -26,14 +26,14 @@ var battle_music = preload("res://music/BattleMusic1.1Cello.mp3")
 
 var stick_attack_sound = preload("res://sounds/ES_Wooden Stick, Hit Log, Hard - Epidemic Sound.mp3")
 var staff_attack_sound = preload("res://sounds/Weapons/StaffAttackSound.wav")
-var spear_attack_sound = preload("res://sounds/Weapons/SpearAttackSound.mp3")
+var spear_attack_sound = preload("res://sounds/Weapons/SpearAttackSound_version_2.mp3")
 var sword_attack_sound = preload("res://sounds/Weapons/SwordAttackSound.mp3")
-var revolver_attack_sound = preload("res://sounds/Weapons/RevolverAttackSound.mp3")
+var revolver_attack_sound = preload("res://sounds/Weapons/RevolverAttackSound_version_2.mp3")
 
 var slime_attack_sound = preload("res://sounds/Monsters/Slime/SlimeAttackSound.mp3")
-var wolf_attack_sound = preload("res://sounds/Monsters/Wolf/WolfAttackSound.mp3")
+var wolf_attack_sound = preload("res://sounds/Monsters/Wolf/WolfAttackSound_version_2.mp3")
 var black_knight_attack_sound = preload("res://sounds/Monsters/BlackKnight/BlackKnightAttackSound.mp3")
-var eldritch_attack_sound = preload("res://sounds/Monsters/EldritchBeast/EldritchBeastAttackSound.mp3")
+var eldritch_attack_sound = preload("res://sounds/Monsters/EldritchBeast/EldritchBeastAttackSound_version_2.mp3")
 var demon_attack_sound = preload("res://sounds/Monsters/Demon/DemonAttackSound.mp3")
 
 var button_entered_sound = preload("res://sounds/MenuHoverBop.wav")
