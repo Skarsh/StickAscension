@@ -42,6 +42,8 @@ var game_active = false
 var player_turn = true
 var is_animating = false
 
+var attack_hit = false
+
 const PLAYER_SCALE = 2.5
 const PLAYER_SPRITE_SCALE = 10
 
@@ -88,7 +90,6 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	var target_pos = target.position
 
 	# Calculate control point for the quadratic curve
-	# Point above and between attacker and target
 	var control_point = Vector2(
 		(start_pos.x + target_pos.x) / 2,
 		min(start_pos.y, target_pos.y) - 200
@@ -100,12 +101,20 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	var attack_duration = 0.3
 	var return_duration = 0.2
 
-	# Forward attack animation
+	# Point in the animation where we consider the hit to occur
+	var hit_threshold = 0.9  
+
+	# Forward attack animation with hit detection
 	tween.tween_method(
 		func(t: float):
 			var q0 = start_pos.lerp(control_point, t)
 			var q1 = control_point.lerp(target_pos, t)
-			attacker.position = q0.lerp(q1, t), 0.0, 1.0, attack_duration
+			attacker.position = q0.lerp(q1, t)
+			
+			# Detect hit point
+			if t >= hit_threshold and not attack_hit:
+				attack_hit = true
+				_on_attack_hit(attacker, target), 0.0, 1.0, attack_duration
 	)
 
 	# Return attack animation
@@ -118,36 +127,24 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 
 	tween.tween_callback(func():
 		is_animating = false
+		attack_hit = false  # Reset hit state
 		on_complete.call()
 	)
 
 func start_enemy_attack_timer() -> void:
-	var delay = randf_range(1.0, 2.0)
+	var delay = 1.0
 	enemy_attack_timer.start(delay)
 
 func _on_enemy_attack_timer_timeout() -> void:
 	if game_active and not player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
 		perform_attack_animation(enemy_instance, player_instance, func():
-			# TODO(Thomas): What to do when the player dies?
 			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
+			# TODO(Thomas): Make a screen pop up or something about the player having died
 			if not alive:
 				GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
 				get_tree().change_scene_to_file("res://scenes/shop.tscn")
 		)
 
-		match enemy_instance.kind:
-			Enemy.EnemyKind.Slime:
-				enemy_sound_player.stream = slime_attack_sound
-			Enemy.EnemyKind.Wolf:
-				enemy_sound_player.stream = wolf_attack_sound
-			Enemy.EnemyKind.BlackKnight:
-				enemy_sound_player.stream = black_knight_attack_sound
-			Enemy.EnemyKind.Eldritch:
-				enemy_sound_player.stream = eldritch_attack_sound
-			Enemy.EnemyKind.Demon:
-				enemy_sound_player.stream = demon_attack_sound
-
-		enemy_sound_player.play()
 		player_turn = true
 
 func _process(delta: float) -> void:	
@@ -178,19 +175,6 @@ func _on_attack_pressed() -> void:
 				enemy_instance.show()
 		)
 
-		match player_instance.kind:
-			Player.WeaponKind.Stick:
-				player_sound_player.stream = stick_attack_sound
-			Player.WeaponKind.Staff:
-				player_sound_player.stream = staff_attack_sound
-			Player.WeaponKind.Spear:
-				player_sound_player.stream = spear_attack_sound
-			Player.WeaponKind.Sword:
-				player_sound_player.stream = sword_attack_sound
-			Player.WeaponKind.Revolver:
-				player_sound_player.stream = revolver_attack_sound
-
-		player_sound_player.play()
 		player_turn = false
 
 		# It's not time for the enemy to attack us
@@ -213,3 +197,35 @@ func _on_escape_pressed() -> void:
 func _on_mission_text_panel_container_start_battle_scene_signal() -> void:
 	await get_tree().process_frame
 	start_battle_scene()
+
+func _on_attack_hit(attacker: Node2D, target: Node2D) -> void:
+	# Play hit sound effects
+	if attacker == player_instance:
+		match player_instance.kind:
+			Player.WeaponKind.Stick:
+				player_sound_player.stream = stick_attack_sound
+			Player.WeaponKind.Staff:
+				player_sound_player.stream = staff_attack_sound
+			Player.WeaponKind.Spear:
+				player_sound_player.stream = spear_attack_sound
+			Player.WeaponKind.Sword:
+				player_sound_player.stream = sword_attack_sound
+			Player.WeaponKind.Revolver:
+				player_sound_player.stream = revolver_attack_sound
+		player_sound_player.play()
+	else:  # Enemy attack
+		match enemy_instance.kind:
+			Enemy.EnemyKind.Slime:
+				enemy_sound_player.stream = slime_attack_sound
+			Enemy.EnemyKind.Wolf:
+				enemy_sound_player.stream = wolf_attack_sound
+			Enemy.EnemyKind.BlackKnight:
+				enemy_sound_player.stream = black_knight_attack_sound
+			Enemy.EnemyKind.Eldritch:
+				enemy_sound_player.stream = eldritch_attack_sound
+			Enemy.EnemyKind.Demon:
+				enemy_sound_player.stream = demon_attack_sound
+		enemy_sound_player.play()
+
+	# Trigger camera shake
+	camera.start_shake()
