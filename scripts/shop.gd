@@ -158,7 +158,7 @@ func _on_buy_button_pressed() -> void:
 			ItemKind.Def:
 				GameState.player_stats.def += item.value
 			ItemKind.Ap:
-				GameState.player_stats.ap += item.value
+				GameState.player_stats.max_ap += item.value
 		GameState.player_gold -= item.cost
 		GameState.gold_spent += item.cost
 
@@ -172,7 +172,7 @@ func update_ui() -> void:
 	HealthLabel.text = "Health: " + str(GameState.player_stats.max_health)
 	AtkLabel.text = "Atk: " + str(GameState.player_stats.atk)
 	DefLabel.text = "Def: " + str(GameState.player_stats.def)
-	ApLabel.text = "Ap: " + str(GameState.player_stats.ap)
+	ApLabel.text = "Ap: " + str(GameState.player_stats.max_ap)
 
 	HealthCostLabel.text = "Cost: " + str(BASE_HEALTH_COST)
 	AtkCostLabel.text = "Cost: " + str(BASE_ATK_COST)

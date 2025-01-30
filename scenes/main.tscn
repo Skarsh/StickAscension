@@ -355,7 +355,7 @@ text = "Escape to shop"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ufe5y")
-volume_db = -53.405
+volume_db = -54.85
 autoplay = true
 
 [node name="PlayerSoundPlayer" type="AudioStreamPlayer" parent="."]

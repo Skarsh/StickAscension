@@ -328,9 +328,12 @@ func _on_enemy_attack_timer_timeout() -> void:
 			if not alive:
 				GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
 				get_tree().change_scene_to_file("res://scenes/shop.tscn")
+
+			enemy_instance.update_stats()
+
+			player_turn = true
 		)
 
-		player_turn = true
 
 func _process(delta: float) -> void:	
 	if Input.is_action_just_pressed("ui_accept"):
@@ -353,7 +356,7 @@ func perform_attack(attack_kind: AttackKind) -> void:
 		return
 		
 	# Deduct AP cost
-	#player_instance.stats.current_ap -= attack.ap_cost
+	#player_instance.stats.ap -= attack.ap_cost
 	
 	# Choose the appropriate animation
 	match attack_kind:
@@ -412,6 +415,7 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 	
 	# Move turn management to after the animation completes
 	player_turn = false
+	player_instance.update_stats()
 	start_enemy_attack_timer()
 
 func start_battle_scene() -> void:
@@ -470,4 +474,4 @@ func _on_slam_pressed() -> void:
 	perform_attack(AttackKind.Slam)
 
 func _on_orbit_pressed() -> void:
-	perform_attack(AttackKind.Orbit)
+	perform_attack(AttackKind.Slam)

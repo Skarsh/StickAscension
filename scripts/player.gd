@@ -68,7 +68,7 @@ func apply_weapon_multipliers(base_stats: Stats, weapon: WeaponKind) -> Stats:
 		int(base_stats.max_health * multipliers.health),
 		int(base_stats.atk * multipliers.atk),
 		int(base_stats.def * multipliers.def),
-		int(base_stats.ap * multipliers.ap),
+		int(base_stats.max_ap * multipliers.ap),
 	)
 
 func change_weapon_kind(new_kind: WeaponKind) -> void:
