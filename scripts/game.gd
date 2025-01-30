@@ -70,8 +70,8 @@ class AttackInfo:
 
 var attack_kinds = {
 	AttackKind.Strike: AttackInfo.new(1, 1.0, "Strike"),
-	AttackKind.Slam: AttackInfo.new(1, 2.0, "Slam"),
-	AttackKind.Orbit: AttackInfo.new(1, 1.5, "Orbit")
+	AttackKind.Slam: AttackInfo.new(2, 2.3, "Slam"),
+	AttackKind.Orbit: AttackInfo.new(5, 6.2, "Orbit")
 }
 
 func transition_to_turn_state(new_state: TurnState) -> void:
@@ -80,44 +80,43 @@ func transition_to_turn_state(new_state: TurnState) -> void:
 			player_instance.stats.ap = player_instance.stats.max_ap
 			player_instance.update_stats()
 
-			if player_instance:
-				var tween = create_tween()
-				tween.set_parallel(false)  # Set to false to make tweens sequential
-				
-				# Scale up
-				tween.tween_property(player_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
-				
-				# Wait a bit at the larger scale
-				tween.tween_interval(0.2)
-				
-				# Scale back down
-				tween.tween_property(player_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
-				
-				await tween.finished
+			var tween = create_tween()
+			tween.set_parallel(false)  # Set to false to make tweens sequential
+			
+			# Scale up
+			tween.tween_property(player_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
+			
+			# Wait a bit at the larger scale
+			tween.tween_interval(0.2)
+			
+			# Scale back down
+			tween.tween_property(player_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
+			
+			await tween.finished
 
 		TurnState.ENEMY_TURN:
-			if enemy_instance:
-				var tween = create_tween()
-				tween.set_parallel(false)  # Set to false to make tweens sequential
-				
-				# Scale up
-				tween.tween_property(enemy_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
-				
-				# Wait a bit at the larger scale
-				tween.tween_interval(0.2)
-				
-				# Scale back down
-				tween.tween_property(enemy_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
-				
-				await tween.finished
+			var tween = create_tween()
+			tween.set_parallel(false)  # Set to false to make tweens sequential
+			
+			# Scale up
+			tween.tween_property(enemy_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
+			
+			# Wait a bit at the larger scale
+			tween.tween_interval(0.2)
+			
+			# Scale back down
+			tween.tween_property(enemy_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
+			
+			await tween.finished
+			
+			enemy_instance.stats.ap = enemy_instance.stats.max_ap
+			enemy_instance.update_stats()
 			start_enemy_attack_timer()
 		TurnState.GAME_OVER:
 			# Handle game over logic
 			pass
 	
 	current_turn_state = new_state
-
-
 
 
 func _ready() -> void:
@@ -140,6 +139,7 @@ func _ready() -> void:
 		GameState.started = true
 		GameState.player_stats = player_instance.stats
 		GameState.next_level = 2
+		GameState.player_stats.health = GameState.player_stats.max_health
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
@@ -345,33 +345,74 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	else:
 		perform_orbit_attack_animation(attacker, target, on_complete)
 
-func start_enemy_attack_timer() -> void:
-	var delay = 1.0
-	enemy_attack_timer.start(delay)
+func choose_enemy_attack() -> AttackKind:
+	# Choose the highest damage attack the enemy can afford
+	if enemy_instance.stats.ap >= 5:
+		return AttackKind.Orbit
+	elif enemy_instance.stats.ap >= 2:
+		return AttackKind.Slam
+	elif enemy_instance.stats.ap >= 1:
+		return AttackKind.Strike
+	return AttackKind.Strike  # Fallback, though this shouldn't happen
 
-func _on_enemy_attack_timer_timeout() -> void:
+func start_enemy_attack_sequence() -> void:
 	if not game_active or not enemy_instance.alive or not player_instance.alive:
 		return
 		
 	if current_turn_state != TurnState.ENEMY_TURN:
 		return
-		
-	current_turn_state = TurnState.ANIMATING
-	perform_attack_animation(enemy_instance, player_instance, func():
-		var alive = player_instance.take_damage(
-			player_instance.stats.calculate_damage(enemy_instance.stats)
-		)
-		
-		if not alive:
-			current_turn_state = TurnState.GAME_OVER
-			GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
-			get_tree().change_scene_to_file("res://scenes/shop.tscn")
-			return
-			
-		enemy_instance.update_stats()
-		
+	
+	if enemy_instance.stats.ap <= 0:
 		transition_to_turn_state(TurnState.PLAYER_TURN)
-	)
+		return
+	
+	current_turn_state = TurnState.ANIMATING
+	
+	var chosen_attack = choose_enemy_attack()
+	var attack_info = attack_kinds[chosen_attack]
+	
+	match chosen_attack:
+		AttackKind.Strike:
+			perform_swipe_attack_animation(enemy_instance, player_instance, func():
+				_handle_enemy_attack_complete(attack_info.damage_multiplier, attack_info.ap_cost))
+		AttackKind.Slam:
+			perform_slam_attack_animation(enemy_instance, player_instance, func():
+				_handle_enemy_attack_complete(attack_info.damage_multiplier, attack_info.ap_cost))
+		AttackKind.Orbit:
+			perform_orbit_attack_animation(enemy_instance, player_instance, func():
+				_handle_enemy_attack_complete(attack_info.damage_multiplier, attack_info.ap_cost))
+
+func start_enemy_attack_timer() -> void:
+	var delay = 0.5  # Initial delay before enemy turn starts
+	enemy_attack_timer.start(delay)
+
+func _on_enemy_attack_timer_timeout() -> void:
+	start_enemy_attack_sequence()  # Start the attack sequence when the initial timer runs out
+
+
+func _handle_enemy_attack_complete(damage_multiplier: float, ap_cost: int) -> void:
+	var damage = player_instance.stats.calculate_damage(enemy_instance.stats)
+	damage = int(damage * damage_multiplier)
+	
+	var alive = player_instance.take_damage(damage)
+	if not alive:
+		current_turn_state = TurnState.GAME_OVER
+		GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
+		get_tree().change_scene_to_file("res://scenes/shop.tscn")
+		return
+		
+	enemy_instance.stats.ap -= ap_cost
+	enemy_instance.update_stats()
+	
+	# Important: Instead of using a timer, immediately start the next attack if we have AP
+	if enemy_instance.stats.ap > 0:
+		current_turn_state = TurnState.ENEMY_TURN
+		# Add a small delay before the next attack for better visual pacing
+		await get_tree().create_timer(0.5).timeout
+		start_enemy_attack_sequence()
+	else:
+		# No more AP, switch to player turn
+		transition_to_turn_state(TurnState.PLAYER_TURN)
 
 func _process(delta: float) -> void:    
 	if Input.is_action_just_pressed("ui_accept"):
@@ -442,8 +483,6 @@ func _handle_attack_complete(damage_multiplier: float) -> void:
 		transition_to_turn_state(TurnState.ENEMY_TURN)
 	else:
 		current_turn_state = TurnState.PLAYER_TURN  # Return to player turn for more actions if AP remains
-
-
 
 func start_battle_scene() -> void:
 	mission_text.hide()
