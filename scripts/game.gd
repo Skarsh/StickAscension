@@ -1,5 +1,12 @@
 extends Node2D
 
+enum TurnState {
+	PLAYER_TURN,
+	ENEMY_TURN,
+	ANIMATING,
+	GAME_OVER
+}
+
 @onready var camera: Camera2D = $Camera2D
 @onready var mission_text: MissionText = $CanvasLayer/MissionTextPanelContainer
 @onready var interaction_buttons: HBoxContainer = $CanvasLayer/InteractionButtons
@@ -39,7 +46,7 @@ var enemy_instance
 var slime_enemy_instance
 
 var game_active = false
-var player_turn = true
+var current_turn_state = TurnState.PLAYER_TURN
 var is_animating = false
 
 var attack_hit = false
@@ -67,8 +74,53 @@ var attack_kinds = {
 	AttackKind.Orbit: AttackInfo.new(1, 1.5, "Orbit")
 }
 
-func _ready() -> void:
+func transition_to_turn_state(new_state: TurnState) -> void:
+	match new_state:
+		TurnState.PLAYER_TURN:
+			player_instance.stats.ap = player_instance.stats.max_ap
+			player_instance.update_stats()
 
+			if player_instance:
+				var tween = create_tween()
+				tween.set_parallel(false)  # Set to false to make tweens sequential
+				
+				# Scale up
+				tween.tween_property(player_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
+				
+				# Wait a bit at the larger scale
+				tween.tween_interval(0.2)
+				
+				# Scale back down
+				tween.tween_property(player_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
+				
+				await tween.finished
+
+		TurnState.ENEMY_TURN:
+			if enemy_instance:
+				var tween = create_tween()
+				tween.set_parallel(false)  # Set to false to make tweens sequential
+				
+				# Scale up
+				tween.tween_property(enemy_instance, "scale", Vector2(1.5 * PLAYER_SCALE, 1.5 * PLAYER_SCALE), 0.5).set_ease(Tween.EASE_OUT)
+				
+				# Wait a bit at the larger scale
+				tween.tween_interval(0.2)
+				
+				# Scale back down
+				tween.tween_property(enemy_instance, "scale", Vector2(PLAYER_SCALE, PLAYER_SCALE), 0.5).set_ease(Tween.EASE_IN)
+				
+				await tween.finished
+			start_enemy_attack_timer()
+		TurnState.GAME_OVER:
+			# Handle game over logic
+			pass
+	
+	current_turn_state = new_state
+
+
+
+
+func _ready() -> void:
 	add_child(enemy_attack_timer)
 	enemy_attack_timer.one_shot = true
 	enemy_attack_timer.timeout.connect(_on_enemy_attack_timer_timeout)
@@ -79,7 +131,6 @@ func _ready() -> void:
 	player_instance.sprite.scale /= PLAYER_SPRITE_SCALE
 	player_instance.position = Vector2(-500, 0)
 
-	# TODO(Thomas): Set more of the previous player state, e.g weaponkind, stats etc
 	if GameState.started == true:
 		player_instance.gold = GameState.player_gold
 		player_instance.stats = GameState.player_stats
@@ -88,13 +139,10 @@ func _ready() -> void:
 	else:
 		GameState.started = true
 		GameState.player_stats = player_instance.stats
-		
-		# TODO(Thomas): Need better initialization stuff
 		GameState.next_level = 2
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
-
 
 	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 
@@ -109,7 +157,6 @@ func perform_orbit_attack_animation(attacker: Node2D, target: Node2D, on_complet
 	var target_pos = target.position
 	var original_rotation = attacker.rotation
 	
-	# Calculate initial orbit angle based on attacker's position relative to target
 	var initial_angle = (start_pos - target_pos).angle()
 	
 	var tween = create_tween()
@@ -119,15 +166,12 @@ func perform_orbit_attack_animation(attacker: Node2D, target: Node2D, on_complet
 	var strike_duration = 0.2
 	var return_duration = 0.3
 	
-	# Start camera zoom out much further for the orbit
-	camera.zoom_out(0.4, orbit_duration * 0.2)  # Zoom out to 40% quickly
+	camera.zoom_out(0.4, orbit_duration * 0.2)
 	
-	# Orbit around target
 	tween.tween_method(
 		func(t: float):
-			# Start from the initial angle and do 2 orbits
-			var angle = initial_angle + t * PI * 4  # 2 full orbits
-			var current_radius = (start_pos - target_pos).length() * (1.0 - t * 0.3)  # Gradually get closer
+			var angle = initial_angle + t * PI * 4
+			var current_radius = (start_pos - target_pos).length() * (1.0 - t * 0.3)
 			
 			var orbit_offset = Vector2(
 				cos(angle) * current_radius,
@@ -136,29 +180,24 @@ func perform_orbit_attack_animation(attacker: Node2D, target: Node2D, on_complet
 			
 			attacker.position = target_pos + orbit_offset
 			
-			# Keep card oriented to orbit direction
 			var tangent_angle = angle + PI/2
 			attacker.rotation = tangent_angle, 0.0, 1.0, orbit_duration
 	)
 	
-	# Start zooming back in before the strike
 	tween.tween_callback(func():
-		camera.zoom_reset(strike_duration * 1.5)  # Slightly longer zoom-in for smoother transition
+		camera.zoom_reset(strike_duration * 1.5)
 	)
 	
-	# Quick strike to target
 	tween.tween_method(
 		func(t: float):
 			attacker.position = attacker.position.lerp(target_pos, t), 0.0, 1.0, strike_duration
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	
-	# Hit impact
 	tween.tween_callback(func():
 		attack_hit = true
 		_on_attack_hit(attacker, target, true)
 	)
 	
-	# Return to start
 	tween.tween_method(
 		func(t: float):
 			attacker.position = target_pos.lerp(start_pos, t)
@@ -173,7 +212,6 @@ func perform_orbit_attack_animation(attacker: Node2D, target: Node2D, on_complet
 		on_complete.call()
 	)
 
-
 func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
 	if is_animating:
 		return
@@ -184,9 +222,8 @@ func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete
 	var start_pos = attacker.position
 	var target_pos = target.position
 	var original_rotation = attacker.rotation
-	var slam_rotation = PI/2 if attacker == player_instance else -PI/2  # Adjusted rotation based on attacker
+	var slam_rotation = PI/2 if attacker == player_instance else -PI/2
 	
-	# Calculate arc control points
 	var peak_height = 800
 	var arc_control = Vector2(
 		(start_pos.x + target_pos.x) / 2,
@@ -203,10 +240,8 @@ func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete
 	var slam_duration = 0.15
 	var return_duration = 0.3
 	
-	# Start camera zoom out as we rise
 	camera.zoom_out(0.5, rise_duration * 0.5)
 	
-	# Rise up in arc
 	tween.tween_method(
 		func(t: float):
 			var q0 = start_pos.lerp(arc_control, t)
@@ -221,19 +256,16 @@ func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete
 		camera.zoom_reset(slam_duration)
 	)
 	
-	# Slam down
 	tween.tween_method(
 		func(t: float):
 			attacker.position = hover_pos.lerp(target_pos, t), 0.0, 1.0, slam_duration
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
 	
-	# Trigger hit effect at impact
 	tween.tween_callback(func():
 		attack_hit = true
 		_on_attack_hit(attacker, target, true)
 	)
 	
-	# Return to start
 	tween.tween_method(
 		func(t: float):
 			attacker.position = target_pos.lerp(start_pos, t)
@@ -248,8 +280,7 @@ func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete
 		on_complete.call()
 	)
 
-# Modify the original attack animation to be a separate function
-func perform_swipe_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void: 
+func perform_swipe_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
 	if is_animating:
 		return
 	
@@ -306,7 +337,6 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	if is_animating:
 		return
 		
-	# Random choice between all three attacks
 	var attack_choice = randf()
 	if attack_choice < 0.33:
 		perform_swipe_attack_animation(attacker, target, on_complete)
@@ -315,50 +345,56 @@ func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Cal
 	else:
 		perform_orbit_attack_animation(attacker, target, on_complete)
 
-
 func start_enemy_attack_timer() -> void:
 	var delay = 1.0
 	enemy_attack_timer.start(delay)
 
 func _on_enemy_attack_timer_timeout() -> void:
-	if game_active and not player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
-		perform_attack_animation(enemy_instance, player_instance, func():
-			var alive = player_instance.take_damage(player_instance.stats.calculate_damage(enemy_instance.stats))
-			# TODO(Thomas): Make a screen pop up or something about the player having died
-			if not alive:
-				GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
-				get_tree().change_scene_to_file("res://scenes/shop.tscn")
-
-			enemy_instance.update_stats()
-
-			player_turn = true
+	if not game_active or not enemy_instance.alive or not player_instance.alive:
+		return
+		
+	if current_turn_state != TurnState.ENEMY_TURN:
+		return
+		
+	current_turn_state = TurnState.ANIMATING
+	perform_attack_animation(enemy_instance, player_instance, func():
+		var alive = player_instance.take_damage(
+			player_instance.stats.calculate_damage(enemy_instance.stats)
 		)
+		
+		if not alive:
+			current_turn_state = TurnState.GAME_OVER
+			GameState.player_gold = int(DEATH_PENALTY * GameState.player_gold)
+			get_tree().change_scene_to_file("res://scenes/shop.tscn")
+			return
+			
+		enemy_instance.update_stats()
+		
+		transition_to_turn_state(TurnState.PLAYER_TURN)
+	)
 
-
-func _process(delta: float) -> void:	
+func _process(delta: float) -> void:    
 	if Input.is_action_just_pressed("ui_accept"):
 		mission_text.stop_typing_effect()
 		
 func _on_ok_button_pressed() -> void:
 	start_battle_scene()
 
-# Modified attack function to handle attack types
 func perform_attack(attack_kind: AttackKind) -> void:
-	if not game_active or not player_turn or is_animating or not player_instance.alive or not enemy_instance.alive:
+	if not game_active or is_animating:
+		return
+		
+	if current_turn_state != TurnState.PLAYER_TURN:
 		return
 		
 	var attack = attack_kinds[attack_kind]
 	
-	# Check if player has enough AP
-	#if player_instance.stats.current_ap < attack.ap_cost:
 	if player_instance.stats.ap < attack.ap_cost:
-		# TODO: Show "Not enough AP" message to player
 		return
 		
-	# Deduct AP cost
-	#player_instance.stats.ap -= attack.ap_cost
+	player_instance.stats.ap -= attack.ap_cost
+	current_turn_state = TurnState.ANIMATING
 	
-	# Choose the appropriate animation
 	match attack_kind:
 		AttackKind.Strike:
 			perform_swipe_attack_animation(player_instance, enemy_instance, func():
@@ -370,53 +406,24 @@ func perform_attack(attack_kind: AttackKind) -> void:
 			perform_orbit_attack_animation(player_instance, enemy_instance, func():
 				_handle_attack_complete(attack.damage_multiplier))
 
-	
-func _on_attack_pressed() -> void:
-	if game_active and player_turn and not is_animating and player_instance.alive and enemy_instance.alive:
-		perform_attack_animation(player_instance, enemy_instance, func():
-			var alive = enemy_instance.take_damage(enemy_instance.stats.calculate_damage(player_instance.stats))
-			if not alive:
-				# Drops
-				var gold_amount = enemy_instance.generate_drop()
-				GameState.player_gold += gold_amount
-				gold_label.text = str(GameState.player_gold)
-
-				# Despawn
-				enemy_instance.hide()
-				spawner.despawn(enemy_instance)
-
-				#Spawn
-				enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
-				enemy_instance.show()
-				
-			player_turn = false
-			start_enemy_attack_timer()
-		)
-
-
 func _handle_attack_complete(damage_multiplier: float) -> void:
 	var damage = enemy_instance.stats.calculate_damage(player_instance.stats)
 	damage = int(damage * damage_multiplier)
 	
 	var alive = enemy_instance.take_damage(damage)
 	if not alive:
-		# Drops
 		var gold_amount = enemy_instance.generate_drop()
 		GameState.player_gold += gold_amount
 		gold_label.text = str(GameState.player_gold)
-
-		# Despawn
+		
 		enemy_instance.hide()
 		spawner.despawn(enemy_instance)
-
-		#Spawn
 		enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 		enemy_instance.show()
 	
-	# Move turn management to after the animation completes
-	player_turn = false
 	player_instance.update_stats()
-	start_enemy_attack_timer()
+	current_turn_state = TurnState.PLAYER_TURN  # Return to player turn for more actions if AP remains
+
 
 func start_battle_scene() -> void:
 	mission_text.hide()
@@ -427,6 +434,7 @@ func start_battle_scene() -> void:
 	audio_player.play()
 	game_active = true
 	interaction_buttons.show()
+	transition_to_turn_state(TurnState.PLAYER_TURN)
 
 func _on_escape_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/shop.tscn")
@@ -476,6 +484,8 @@ func _on_slam_pressed() -> void:
 func _on_orbit_pressed() -> void:
 	perform_attack(AttackKind.Orbit)
 
-
 func _on_end_turn_pressed() -> void:
-	pass # Replace with function body.
+	if current_turn_state != TurnState.PLAYER_TURN or is_animating:
+		return
+		
+	transition_to_turn_state(TurnState.ENEMY_TURN)
