@@ -243,7 +243,7 @@ offset_top = -20.0
 offset_right = 76.0
 offset_bottom = 20.0
 grow_vertical = 2
-theme_override_constants/margin_left = 25
+theme_override_constants/margin_left = 38
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/InteractionButtons/EndTurn/MarginContainer"]
 layout_mode = 2

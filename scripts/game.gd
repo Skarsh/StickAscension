@@ -9,7 +9,12 @@ enum TurnState {
 
 @onready var camera: Camera2D = $Camera2D
 @onready var mission_text: MissionText = $CanvasLayer/MissionTextPanelContainer
+
 @onready var interaction_buttons: HBoxContainer = $CanvasLayer/InteractionButtons
+@onready var strike_button_label: Label =  $CanvasLayer/InteractionButtons/Strike/MarginContainer/HBoxContainer/Label
+@onready var slam_button_label: Label = $CanvasLayer/InteractionButtons/Slam/MarginContainer/HBoxContainer/Label
+@onready var orbit_button_label: Label = $CanvasLayer/InteractionButtons/Orbit/MarginContainer/HBoxContainer/Label
+
 @onready var gold_label: Label = $CanvasLayer/Gold/Label
 
 @onready var audio_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -143,6 +148,8 @@ func _ready() -> void:
 
 	player_instance.hide()
 	gold_label.text = str(player_instance.gold)
+
+	update_ui()
 
 	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 
@@ -533,6 +540,11 @@ func _on_attack_hit(attacker: Node2D, target: Node2D, is_slam: bool = false) -> 
 
 	# Trigger appropriate camera shake
 	camera.start_shake(is_slam)
+
+func update_ui():
+	strike_button_label.text = "Strike " + str(attack_kinds[AttackKind.Strike].ap_cost)
+	slam_button_label.text = "Slam " + str(attack_kinds[AttackKind.Slam].ap_cost)
+	orbit_button_label.text = "Orbit " + str(attack_kinds[AttackKind.Orbit].ap_cost)
 
 func _on_strike_pressed() -> void:
 	perform_attack(AttackKind.Strike)
