@@ -80,6 +80,82 @@ func _ready() -> void:
 
 	enemy_instance = spawner.spawn(self, spawner.random_enemy_kind())
 
+func perform_orbit_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
+	if is_animating:
+		return
+	
+	is_animating = true
+	attack_hit = false
+	
+	var start_pos = attacker.position
+	var target_pos = target.position
+	var original_rotation = attacker.rotation
+	
+	# Calculate initial orbit angle based on attacker's position relative to target
+	var initial_angle = (start_pos - target_pos).angle()
+	
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	
+	var orbit_duration = 1.2
+	var strike_duration = 0.2
+	var return_duration = 0.3
+	
+	# Start camera zoom out much further for the orbit
+	camera.zoom_out(0.4, orbit_duration * 0.2)  # Zoom out to 40% quickly
+	
+	# Orbit around target
+	tween.tween_method(
+		func(t: float):
+			# Start from the initial angle and do 2 orbits
+			var angle = initial_angle + t * PI * 4  # 2 full orbits
+			var current_radius = (start_pos - target_pos).length() * (1.0 - t * 0.3)  # Gradually get closer
+			
+			var orbit_offset = Vector2(
+				cos(angle) * current_radius,
+				sin(angle) * current_radius
+			)
+			
+			attacker.position = target_pos + orbit_offset
+			
+			# Keep card oriented to orbit direction
+			var tangent_angle = angle + PI/2
+			attacker.rotation = tangent_angle, 0.0, 1.0, orbit_duration
+	)
+	
+	# Start zooming back in before the strike
+	tween.tween_callback(func():
+		camera.zoom_reset(strike_duration * 1.5)  # Slightly longer zoom-in for smoother transition
+	)
+	
+	# Quick strike to target
+	tween.tween_method(
+		func(t: float):
+			attacker.position = attacker.position.lerp(target_pos, t), 0.0, 1.0, strike_duration
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	
+	# Hit impact
+	tween.tween_callback(func():
+		attack_hit = true
+		_on_attack_hit(attacker, target, true)
+	)
+	
+	# Return to start
+	tween.tween_method(
+		func(t: float):
+			attacker.position = target_pos.lerp(start_pos, t)
+			attacker.rotation = lerp_angle(attacker.rotation, original_rotation, t), 0.0, 1.0, return_duration
+	)
+	
+	tween.tween_callback(func():
+		attacker.position = start_pos
+		attacker.rotation = original_rotation
+		is_animating = false
+		attack_hit = false
+		on_complete.call()
+	)
+
+
 func perform_slam_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
 	if is_animating:
 		return
@@ -209,12 +285,18 @@ func perform_swipe_attack_animation(attacker: Node2D, target: Node2D, on_complet
 	)
 
 func perform_attack_animation(attacker: Node2D, target: Node2D, on_complete: Callable) -> void:
-	# TODO(Thomas): This shouldn't be random when we implement the Ap stuff.
-	# Randomly choose between swipe and slam attacks
-	if randf() > 0.5:
+	if is_animating:
+		return
+		
+	# Random choice between all three attacks
+	var attack_choice = randf()
+	if attack_choice < 0.33:
 		perform_swipe_attack_animation(attacker, target, on_complete)
-	else:
+	elif attack_choice < 0.66:
 		perform_slam_attack_animation(attacker, target, on_complete)
+	else:
+		perform_orbit_attack_animation(attacker, target, on_complete)
+
 
 func start_enemy_attack_timer() -> void:
 	var delay = 1.0
