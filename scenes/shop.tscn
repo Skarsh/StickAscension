@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://d16txpx0437sm"]
+[gd_scene load_steps=12 format=3 uid="uid://d16txpx0437sm"]
 
 [ext_resource type="Script" path="res://scripts/shop.gd" id="1_5shy3"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="1_ndm4j"]
 [ext_resource type="Texture2D" uid="uid://dg36ud8yxcdii" path="res://sprites/Coin_version_3_5xScaled.png" id="1_vpxoa"]
+[ext_resource type="Texture2D" uid="uid://c6f2hkh2bgigk" path="res://images/Background.png" id="2_p6c5j"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="3_2gwwh"]
 [ext_resource type="Texture2D" uid="uid://pwibxovgn04n" path="res://sprites/health_icon.png" id="5_gyo4l"]
 [ext_resource type="Texture2D" uid="uid://bnbdy7jpmdi8d" path="res://sprites/atk_icon.png" id="6_d2ihl"]
@@ -28,6 +29,17 @@ HealthCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/
 AtkCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item2/MarginContainer2/HBoxContainer/AtkCostLabel")
 DefCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item3/MarginContainer2/HBoxContainer/DefCostLabel")
 ApCostLabel = NodePath("CanvasLayer/MissionTextPanelContainer/VBoxContainer/Items/Item4/MarginContainer2/HBoxContainer/ApCostLabel")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_p6c5j")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

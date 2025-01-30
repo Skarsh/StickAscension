@@ -1,9 +1,9 @@
 [gd_scene load_steps=14 format=3 uid="uid://cwfoiqu4ta7o2"]
 
-[ext_resource type="Texture2D" uid="uid://c6f2hkh2bgigk" path="res://images/Background.png" id="1_q6nfu"]
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_w7hsy"]
 [ext_resource type="Theme" uid="uid://bxe8wyv5hmnn6" path="res://our_theme.tres" id="2_7d7ee"]
 [ext_resource type="Script" path="res://scripts/camera.gd" id="2_cc7hk"]
+[ext_resource type="Texture2D" uid="uid://bldb8oaj8p8a5" path="res://images/Gamebackground_version_3.png" id="3_3ig0i"]
 [ext_resource type="AudioStream" uid="uid://cwc7u3f6yloen" path="res://music/CardSong1.1.mp3" id="6_ufe5y"]
 [ext_resource type="Texture2D" uid="uid://cuh40lpcslv2a" path="res://sprites/Stick_Version_3_Stick.png" id="7_5n7xk"]
 [ext_resource type="Texture2D" uid="uid://c0mwss4pvak8o" path="res://ui/ButtonBasicSmall.png" id="7_ica6u"]
@@ -27,10 +27,16 @@ spawner = NodePath("Spawner")
 [node name="Camera2D" type="Camera2D" parent="."]
 script = ExtResource("2_cc7hk")
 
-[node name="Background" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
-texture = ExtResource("1_q6nfu")
-metadata/_edit_lock_ = true
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_3ig0i")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
